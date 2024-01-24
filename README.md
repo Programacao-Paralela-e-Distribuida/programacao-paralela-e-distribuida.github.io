@@ -4,7 +4,6 @@
 
 ---
 
-![Capa do Livro!](Capa.webp "Capa do Livro")
 <p>
   <img src="Capa.webp" width="300" height="400">
 </p>
