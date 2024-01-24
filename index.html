@@ -17,50 +17,23 @@
 <p>A formação de recursos humanos especializados nessa área demanda um longo tempo de investimento e deve ser iniciada o mais cedo possível, já nos primeiros anos dos cursos de graduação, seja nos cursos de Engenharia da Computação, Ciência da Computação ou Engenharia de Software.</p>
 
 <p>O livbro “Programação Paralela e Distribuída”, publicado pela editora Casa do Código, tem como objetivo apresentar conceitos iniciais de programação paralela para alunos de graduação. Aqui, são abordadas as interfaces de programação e bibliotecas MPI, para uso com o paradigma de troca de mensagens, além de OpenMP e OpenACC, para utilização com o paradigma de memória compartilhada e aceleradores.</p>
-<p>O <strong>MPI</strong> é uma das interfaces de programação paralela mais utilizadas na computação científica, podendo ser empregada desde os equipamentos mai
-s simples, com apenas algumas dezenas de processadores, até os clusters de alto desempenho, com dezenas de milhares de processadores. O <strong>OpenMP</strong> 
-e o <strong>OpenACC</strong>, por suas vezes, são padrões para programação de sistemas multiprocessadores com memória compartilhada e aceleradores como GPUs e p
-rocessadores manycores, caracterizados pela sua extrema facilidade de uso e relativo baixo custo.</p>
 
-<p>Este livro está organizado da seguinte maneira: primeiramente são apresentado
-s conceitos gerais de programação paralela, os diversos paradigmas de programaçã
-o e formas de desenvolvimento de um programa paralelo, com considerações sobre b
-alanceamento de carga e as métricas de avaliação de desempenho, comuns a qualque
-r tipo de programa paralelo.</p>
-<p>No capítulo seguinte as funções básicas para o envio e recepção de mensagens 
-do MPI são introduzidas. Logo após, as funções de comunicação coletiva, de grand
-e importância para o trabalho cooperativo entre processos, são descritas. Em seg
-uida, são apresentados detalhes sobre os diversos modos disponíveis no MPI para 
-o envio e recepção de mensagens. No capítulo sobre o OpenMP, as diversas diretiv
-as e suas respectivas cláusulas que são utilizadas para explorar o paralelismo e
-mbutido nos laços computacionais são apresentadas, junto das primitivas de sincr
-onização disponíveis na linguagem, essenciais no paradigma de memória compartilh
-ada.</p>
-<p>No último capítulo, as diretivas e cláusulas do OpenACC são discutidos. O Ope
-nACC é compatível com os modelos de programação OpenMP e MPI, ambas as abordagen
-s podem ser combinadas com o OpenACC. O OpenACC é um modelo de programação abert
-a para computação paralela desenvolvido com o objetivo de simplificar a programa
-ção paralela, oferecendo alto desempenho e portabilidade entre diversos tipos de
- arquiteturas: multicore, manycore e GPUs.</p>
-<p>O livro inclui também apêndices com detalhes dos ambientes de execução do <st
-rong>MPI</strong>, <strong>OpenMP</strong> e <strong>OpenACC</strong>. São discu
-tidas as diferenças entre os diversos pacotes e compiladores disponíveis, além d
-as opções de compilação e outros detalhes para extrair o máximo desempenho das a
-plicações.</p>
-<p>Ao longo deste livro são apresentados exemplos simples e objetivos para o uso
- de cada uma das funções, diretivas e cláusulas dos diversos paradigmas, bibliot
-ecas e interfaces de programação abordados. Todos os exemplos foram cuidadosamen
-te elaborados, compilados e testados em ambientes paralelos, de modo que possam 
-ser baixados, compilados e reproduzidos facilmente em qualquer equipamento onde 
-um mínimo de paralelismo esteja disponível. Estudos de caso e exercícios propost
-os podem ser encontrados ao final de cada capítulo, como forma de fixação e comp
-lemento dos conceitos elencados na parte teórica.</p>
-<p>No repositório <a href="https://github.com/Programacao-Paralela-e-Distribuida
-">Programação Paralela e Distribuída</a> estão disponíveis os códigos fontes de 
-todos os exemplos utilizados no livro.</p>
-<p>Esperamos que este livro possa ser um guia seguro para os passos iniciais das
- pessoas interessadas no uso da programação paralela de uma forma eficiente e pr
-odutiva.</p>
+<p>O <strong>MPI</strong> é uma das interfaces de programação paralela mais utilizadas na computação científica, podendo ser empregada desde os equipamentos mais simples, com apenas algumas dezenas de processadores, até os clusters de alto desempenho, com dezenas de milhares de processadores. O <strong>OpenMP</strong> e o <strong>OpenACC</strong>, por suas vezes, são padrões para programação de sistemas multiprocessadores com memória compartilhada e aceleradores como GPUs e processadores manycores, caracterizados pela sua extrema facilidade de uso e relativo baixo custo.</p>
+
+<p>Este livro está organizado da seguinte maneira: primeiramente são apresentados conceitos gerais de programação paralela, os diversos paradigmas de programação e formas de desenvolvimento de um programa paralelo, com considerações sobre balanceamento de carga e as métricas de avaliação de desempenho, comuns a qualquer tipo de programa paralelo.</p>
+
+<p>No capítulo seguinte as funções básicas para o envio e recepção de mensagens do MPI são introduzidas. Logo após, as funções de comunicação coletiva, de grande importância para o trabalho cooperativo entre processos, são descritas. Em seguida, são apresentados detalhes sobre os diversos modos disponíveis no MPI para o envio e recepção de mensagens. No capítulo sobre o OpenMP, as diversas diretivas e suas respectivas cláusulas que são utilizadas para explorar o paralelismo embutido nos laços computacionais são apresentadas, junto das primitivas de sincronização disponíveis na linguagem, essenciais no paradigma de memória compartilhada.</p>
+
+<p>No último capítulo, as diretivas e cláusulas do OpenACC são discutidos. O OpenACC é compatível com os modelos de programação OpenMP e MPI, ambas as abordagens podem ser combinadas com o OpenACC. O OpenACC é um modelo de programação aberta para computação paralela desenvolvido com o objetivo de simplificar a programação paralela, oferecendo alto desempenho e portabilidade entre diversos tipos de arquiteturas: multicore, manycore e GPUs.</p>
+
+<p>O livro inclui também apêndices com detalhes dos ambientes de execução do <strong>MPI</strong>, <strong>OpenMP</strong> e <strong>OpenACC</strong>. São discutidas as diferenças entre os diversos pacotes e compiladores disponíveis, além das opções de compilação e outros detalhes para extrair o máximo desempenho das aplicações.</p>
+
+<p>Ao longo deste livro são apresentados exemplos simples e objetivos para o uso de cada uma das funções, diretivas e cláusulas dos diversos paradigmas, bibliotecas e interfaces de programação abordados. Todos os exemplos foram cuidadosamente elaborados, compilados e testados em ambientes paralelos, de modo que possam ser baixados, compilados e reproduzidos facilmente em qualquer equipamento onde um mínimo de paralelismo esteja disponível. Estudos de caso e exercícios propostos podem ser encontrados ao final de cada capítulo, como forma de fixação e complemento dos conceitos elencados na parte teórica.</p>
+
+<p>No repositório <a href="https://github.com/Programacao-Paralela-e-Distribuida">Programação Paralela e Distribuída</a> estão disponíveis os códigos fontes de todos os exemplos utilizados no livro.</p>
+
+<p>Esperamos que este livro possa ser um guia seguro para os passos iniciais das pessoas interessadas no uso da programação paralela de uma forma eficiente e produtiva.</p>
+
 <p>O Livro está organizado da seguinte maneira:</p>
 <ol type="1">
 <li>Introdução
