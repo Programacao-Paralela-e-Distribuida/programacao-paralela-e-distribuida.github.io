@@ -12,7 +12,7 @@ A formação de recursos humanos especializados nessa área demanda um longo tem
 
 O livbro "Programação Paralela e Distribuíd, publicado pela editora Casa do Código, tem como objetivo apresentar conceitos iniciais de programação paralela para alunos de graduação. Aqui, são abordadas as interfaces de programação e bibliotecas MPI, para uso com o paradigma de troca de mensagens, além de OpenMP e OpenACC, para utilização com o paradigma de memória compartilhada e aceleradores.
 
-No repositório [Programação Paralela e Distribuída}(https://github.com/Programacao-Paralela-e-Distribuida) estão disponíveis os códigos fontes de todos os exemplos utilizados no livro. Esperamos que sejam úteis para vocês. 
+No repositório [Programação Paralela e Distribuída](https://github.com/Programacao-Paralela-e-Distribuida) estão disponíveis os códigos fontes de todos os exemplos utilizados no livro. Esperamos que sejam úteis para vocês. 
 
 
 
