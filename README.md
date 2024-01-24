@@ -21,75 +21,75 @@ No repositório [Programação Paralela e Distribuída](https://github.com/Progr
 O Livro está organizado da seguinte maneira:
 
 1 Introdução
-1.1 Exemplos de aplicações paralelas
-1.2 MPI
-1.3 OpenMP
-1.4 OpenACC
+  1.1 Exemplos de aplicações paralelas
+  1.2 MPI
+  1.3 OpenMP
+  1.4 OpenACC
 2 Conceitos básicos
-2.1 Processos e Threads
-2.2 Programação paralela
-2.3 Balanceamento de carga
-2.4 Avaliação de desempenho
-2.5 Arquiteturas paralelas
-2.6 Exercícios propostos
+  2.1 Processos e Threads
+  2.2 Programação paralela
+  2.3 Balanceamento de carga
+  2.4 Avaliação de desempenho
+  2.5 Arquiteturas paralelas
+  2.6 Exercícios propostos
 3 Comunicação ponto a ponto no MPI
-3.1 Introdução
-3.2 Comunicadores
-3.3 Exemplo de um programa em MPI
-3.4 Funções de gerenciamento do ambiente
-3.5 Envio e recepção de mensagens
-3.6 Identificando as mensagens recebidas
-3.7 Algumas recomendações
-3.8 Estudo de caso: método do trapézio
-3.9 Exercícios propostos
+  3.1 Introdução
+  3.2 Comunicadores
+  3.3 Exemplo de um programa em MPI
+  3.4 Funções de gerenciamento do ambiente
+  3.5 Envio e recepção de mensagens
+  3.6 Identificando as mensagens recebidas
+  3.7 Algumas recomendações
+  3.8 Estudo de caso: método do trapézio
+  3.9 Exercícios propostos
 4 Comunicação coletiva no MPI
-4.1 Barreira
-4.2 Difusão
-4.3 Distribuição
-4.4 Coleta
-4.5 Redução
-4.6 Redução com difusão
-4.7 Coleta com difusão
-4.8 Transposição
-4.9 Algumas observações
-4.10 Estudo de caso: multiplicação de matriz por vetor
-4.11 Exercícios propostos
+  4.1 Barreira
+  4.2 Difusão
+  4.3 Distribuição
+  4.4 Coleta
+  4.5 Redução
+  4.6 Redução com difusão
+  4.7 Coleta com difusão
+  4.8 Transposição
+  4.9 Algumas observações
+  4.10 Estudo de caso: multiplicação de matriz por vetor
+  4.11 Exercícios propostos
 5 Comunicação MPI em detalhes
-5.1 Introdução
-5.2 Rotinas de envio e recepção bloqueantes
-5.3 Rotinas de envio e recepção não bloqueantes
-5.4 Esperando a mensagem
-5.5 Modos de comunicação
-5.6 Evitando o impasse ou deadlock
-5.7 Considerações de desempenho
-5.8 Estudo de caso: números primos
-5.9 Exercícios propostos
+  5.1 Introdução
+  5.2 Rotinas de envio e recepção bloqueantes
+  5.3 Rotinas de envio e recepção não bloqueantes
+  5.4 Esperando a mensagem
+  5.5 Modos de comunicação
+  5.6 Evitando o impasse ou deadlock
+  5.7 Considerações de desempenho
+  5.8 Estudo de caso: números primos
+  5.9 Exercícios propostos
 6 OpenMP
-6.1 Introdução
-6.2 Diretivas principais
-6.3 Funções OPENMP
-6.4 Cláusulas
-6.5 Sincronização
-6.6 Variáveis de ambiente
-6.7 Erros comuns e recomendações
-6.8 Estudos de caso
-6.9 Exercícios
+  6.1 Introdução
+  6.2 Diretivas principais
+  6.3 Funções OPENMP
+  6.4 Cláusulas
+  6.5 Sincronização
+  6.6 Variáveis de ambiente
+  6.7 Erros comuns e recomendações
+  6.8 Estudos de caso
+  6.9 Exercícios
 7 OpenACC
-7.1 Modelo de programação OpenACC
-7.2 Diretivas principais
-7.3 Movimentação de dados
-7.4 Cláusulas das diretivas parallel
-7.5 Cláusulas da diretiva loop
-7.6 Diretivas avançadas
-7.7 Funções OpenACC
-7.8 Variáveis de ambiente
-7.9 Erros comuns e recomendações
-7.10 Estudos de caso
-7.11 Exercícios
+  7.1 Modelo de programação OpenACC
+  7.2 Diretivas principais
+  7.3 Movimentação de dados
+  7.4 Cláusulas das diretivas parallel
+  7.5 Cláusulas da diretiva loop
+  7.6 Diretivas avançadas
+  7.7 Funções OpenACC
+  7.8 Variáveis de ambiente
+  7.9 Erros comuns e recomendações
+  7.10 Estudos de caso
+  7.11 Exercícios
 8 Ambientes de execução
-8.1 Preparação do ambiente de execução MPI
-8.2 Preparação do Ambiente de Execução OpenMP
-8.3 Preparação do ambiente de execução OpenACC
+  8.1 Preparação do ambiente de execução MPI
+  8.2 Preparação do Ambiente de Execução OpenMP
+  8.3 Preparação do ambiente de execução OpenACC
 
 
 
