@@ -21,10 +21,10 @@ No repositório [Programação Paralela e Distribuída](https://github.com/Progr
 O Livro está organizado da seguinte maneira:
 
 1. Introdução
-   1.1 Exemplos de aplicações paralelas
-   1.2 MPI
-   1.3 OpenMP
-   1.4 OpenACC
+   1.1. Exemplos de aplicações paralelas
+   1.2. MPI
+   1.3. OpenMP
+   1.4. OpenACC
 2. Conceitos básicos
    2.1 Processos e Threads
    2.2 Programação paralela
