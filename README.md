@@ -6,7 +6,7 @@
 
 ![Capa do Livro!](Capa.webp "Capa do Livro")
 <p>
-  <img src="Capa.webp" width="200" height="100">
+  <img src="Capa.webp" width="100" height="200">
 </p>
 
 A pesquisa científica moderna, em diversas áreas de conhecimento, tem desenvolvido modelos computacionais sofisticados para solucionar problemas cada vez mais complexos. Esses modelos são transformados em aplicações paralelas que realizam simulações visando obter, no menor prazo possível, aproximações cada vez mais precisas da realidade.
