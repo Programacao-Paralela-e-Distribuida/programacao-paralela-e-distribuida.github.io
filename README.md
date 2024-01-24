@@ -26,12 +26,12 @@ O Livro está organizado da seguinte maneira:
    - OpenMP
    - OpenACC
 2. Conceitos básicos
-   2. Processos e Threads
+   1. Processos e Threads
    2. Programação paralela
-   2. Balanceamento de carga
-   2. Avaliação de desempenho
-   2. Arquiteturas paralelas
-   2. Exercícios propostos
+   3. Balanceamento de carga
+   4. Avaliação de desempenho
+   5. Arquiteturas paralelas
+   6. Exercícios propostos
 3. Comunicação ponto a ponto no MPI
    3.1 Introdução
    3.2 Comunicadores
