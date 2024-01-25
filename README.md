@@ -91,7 +91,7 @@ O Livro está organizado da seguinte maneira:
    - Sincronização
    - Variáveis de ambiente
    - Erros comuns e recomendações
-   - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENMP">Estudos de caso</a></li>
+   - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENMP">Estudos de caso</a><
    - Exercícios
 7. OpenACC
    - Modelo de programação OpenACC
