@@ -91,7 +91,7 @@ O Livro está organizado da seguinte maneira:
    - Sincronização
    - Variáveis de ambiente
    - Erros comuns e recomendações
-   - Estudos de caso
+   - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENMP">Estudos de caso</a></li>
    - Exercícios
 7. OpenACC
    - Modelo de programação OpenACC
@@ -103,7 +103,7 @@ O Livro está organizado da seguinte maneira:
    - Funções OpenACC
    - Variáveis de ambiente
    - Erros comuns e recomendações
-   - Estudos de caso
+   - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENACC">Estudos de caso</a>
    - Exercícios
 8. Ambientes de execução
    - <a href="https://programacao-paralela-e-distribuida.github.io/MPI/docs/MIP-2024.pdf">Preparação do ambiente de execução MPI</a>
