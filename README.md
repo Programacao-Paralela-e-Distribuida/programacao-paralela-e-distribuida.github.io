@@ -35,6 +35,8 @@ No repositório [Programação Paralela e Distribuída](https://github.com/Progr
 
 Esperamos que este livro possa ser um guia seguro para os passos iniciais das pessoas interessadas no uso da programação paralela de uma forma eficiente e produtiva.
 
+## Conteúdo
+
 O Livro está organizado da seguinte maneira:
 
 1. Introdução
@@ -57,6 +59,7 @@ O Livro está organizado da seguinte maneira:
    - Envio e recepção de mensagens
    - Identificando as mensagens recebidas
    - Algumas recomendações
+   - <a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI">Estudo de caso: método do trapézio</a>
    - Estudo de caso: método do trapézio
    - Exercícios propostos
 4. Comunicação coletiva no MPI
@@ -70,6 +73,7 @@ O Livro está organizado da seguinte maneira:
    - Transposição
    - Algumas observações
    - Estudo de caso: multiplicação de matriz por vetor
+   - <a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI">Estudo de caso: multiplicação de matriz por vetor</a>
    - Exercícios propostos
 5. Comunicação MPI em detalhes
    - Introdução
@@ -79,7 +83,7 @@ O Livro está organizado da seguinte maneira:
    - Modos de comunicação
    - Evitando o impasse ou deadlock
    - Considerações de desempenho
-   - Estudo de caso: números primos
+   - <a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI">Estudo de caso: números primos</a>
    - Exercícios propostos
 6. OpenMP
    - Introdução
