@@ -105,3 +105,11 @@ O Livro está organizado da seguinte maneira:
    - Preparação do ambiente de execução MPI
    - Preparação do Ambiente de Execução OpenMP
    - Preparação do ambiente de execução OpenACC
+  
+<p>Além das instruções para preparação dos diversos ambientes, temos  alguns slides de apoio disponíveis. </p>
+
+<ul>
+<li><a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI/blob/main/docs/Livro_PPD_1.pdf">Slides MPI</a></li>
+<li><a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENMP/blob/main/docs/Livro_PPD_2.pdf">Slides OpenMP</a></li>
+<li><a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENACC/blob/master/docs/Livro_PPD_3.pdf">Slides OpenACC</a></li>
+</ul>
