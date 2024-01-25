@@ -60,7 +60,6 @@ O Livro está organizado da seguinte maneira:
    - Identificando as mensagens recebidas
    - Algumas recomendações
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI">Estudo de caso: método do trapézio</a>
-   - Estudo de caso: método do trapézio
    - Exercícios propostos
 4. Comunicação coletiva no MPI
    - Barreira
@@ -72,7 +71,6 @@ O Livro está organizado da seguinte maneira:
    - Coleta com difusão
    - Transposição
    - Algumas observações
-   - Estudo de caso: multiplicação de matriz por vetor
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI">Estudo de caso: multiplicação de matriz por vetor</a>
    - Exercícios propostos
 5. Comunicação MPI em detalhes
