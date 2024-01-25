@@ -102,9 +102,11 @@ O Livro está organizado da seguinte maneira:
    - Estudos de caso
    - Exercícios
 8. Ambientes de execução
-   - Preparação do ambiente de execução MPI
-   - Preparação do Ambiente de Execução OpenMP
-   - Preparação do ambiente de execução OpenACC
+   - <a href="https://programacao-paralela-e-distribuida.github.io/MPI/docs/MIP-2024.pdf">Preparação do ambiente de execução MPI</a>
+   - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENMP">Preparação do ambiente de execução OpenMP</a>
+   - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENACC">Preparação do ambiente de execução OpenACC</a>
+
+<h2 id="recursos">Recursos</h2>
   
 <p>Além das instruções para preparação dos diversos ambientes, temos  alguns slides de apoio disponíveis. </p>
 
