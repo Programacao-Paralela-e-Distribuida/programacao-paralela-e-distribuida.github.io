@@ -117,5 +117,5 @@ O Livro está organizado da seguinte maneira:
 <ul>
 <li><a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI/blob/main/docs/Livro_PPD_1.pdf">Slides MPI</a></li>
 <li><a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENMP/blob/main/docs/Livro_PPD_2.pdf">Slides OpenMP</a></li>
-<li><a href="https://github.com/Programacao-Paralela-e-Distribuida/ACC/blob/master/docs/Livro_PPD_3.pdf">Slides ACC</a></li>
+<li><a href="https://github.com/Programacao-Paralela-e-Distribuida/ACC/blob/master/docs/Livro_PPD_3.pdf">Slides OpenACC</a></li>
 </ul>
