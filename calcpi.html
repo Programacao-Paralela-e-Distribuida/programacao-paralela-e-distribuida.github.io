@@ -16,7 +16,7 @@
         const { useState, useEffect } = React;
 
         const MPIIntegrationVisualization = () => {
-          const [numProcesses, setNumProcesses] = useState(4);
+          const [numProcesses, setNumProcesses] = useState(1);
           const [numSteps, setNumSteps] = useState(16);
           const [isAnimating, setIsAnimating] = useState(false);
           const [currentStep, setCurrentStep] = useState(0);
@@ -85,7 +85,7 @@
                     </label>
                     <input
                       type="range"
-                      min="2"
+                      min="1"
                       max="8"
                       value={numProcesses}
                       onChange={(e) => {
