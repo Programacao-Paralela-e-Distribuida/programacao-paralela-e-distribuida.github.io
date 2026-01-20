@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integração Paralela MPI - Visualização</title>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const MPIIntegrationVisualization = () => {
+          const [numProcesses, setNumProcesses] = useState(4);
+          const [numSteps, setNumSteps] = useState(16);
+          const [isAnimating, setIsAnimating] = useState(false);
+          const [currentStep, setCurrentStep] = useState(0);
+
+          const processColors = [
+            '#3b82f6', '#ef4444', '#10b981', '#f59e0b',
+            '#8b5cf6', '#ec4899', '#06b6d4', '#f97316',
+          ];
+
+          const getProcessSteps = (rank) => {
+            const steps = [];
+            for (let i = rank; i < numSteps; i += numProcesses) {
+              steps.push(i);
+            }
+            return steps;
+          };
+
+          useEffect(() => {
+            let interval;
+            if (isAnimating) {
+              interval = setInterval(() => {
+                setCurrentStep(prev => {
+                  if (prev >= numSteps) {
+                    setIsAnimating(false);
+                    return numSteps;
+                  }
+                  return prev + 1;
+                });
+              }, 300);
+            }
+            return () => clearInterval(interval);
+          }, [isAnimating, numSteps]);
+
+          const handleReset = () => {
+            setCurrentStep(0);
+            setIsAnimating(false);
+          };
+
+          const handlePlayPause = () => {
+            if (currentStep >= numSteps) {
+              handleReset();
+            }
+            setIsAnimating(!isAnimating);
+          };
+
+          const calculateFunctionValue = (i) => {
+            const step = 1.0 / numSteps;
+            const x = (i + 0.5) * step;
+            return 4.0 / (1.0 + x * x);
+          };
+
+          return (
+            <div className="w-full max-w-6xl mx-auto p-6 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg my-8">
+              <h1 className="text-3xl font-bold text-slate-800 mb-2 text-center">
+                Integração Paralela com MPI
+              </h1>
+              <p className="text-center text-slate-600 mb-6">
+                Cálculo de π usando o método da integral: π = ∫₀¹ 4/(1+x²) dx
+              </p>
+
+              <div className="bg-white rounded-lg p-4 mb-6 shadow">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Número de Processos MPI: {numProcesses}
+                    </label>
+                    <input
+                      type="range"
+                      min="2"
+                      max="8"
+                      value={numProcesses}
+                      onChange={(e) => {
+                        setNumProcesses(parseInt(e.target.value));
+                        handleReset();
+                      }}
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Número de Steps: {numSteps}
+                    </label>
+                    <input
+                      type="range"
+                      min="8"
+                      max="32"
+                      step="4"
+                      value={numSteps}
+                      onChange={(e) => {
+                        setNumSteps(parseInt(e.target.value));
+                        handleReset();
+                      }}
+                      className="w-full"
+                    />
+                  </div>
+                  <div className="flex items-end gap-2">
+                    <button
+                      onClick={handlePlayPause}
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition"
+                    >
+                      {isAnimating ? '⏸ Pausar' : currentStep >= numSteps ? '🔄 Reiniciar' : '▶ Iniciar'}
+                    </button>
+                    <button
+                      onClick={handleReset}
+                      className="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg transition"
+                    >
+                      ↻
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-3 justify-center">
+                  {Array.from({ length: numProcesses }, (_, rank) => (
+                    <div key={rank} className="flex items-center gap-2">
+                      <div
+                        className="w-4 h-4 rounded"
+                        style={{ backgroundColor: processColors[rank % processColors.length] }}
+                      />
+                      <span className="text-sm font-medium text-slate-700">
+                        Rank {rank} ({getProcessSteps(rank).length} steps)
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg p-6 mb-6 shadow">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">
+                  Aproximação da Integral (Método dos Retângulos)
+                </h3>
+                <svg viewBox="0 0 800 400" className="w-full">
+                  <line x1="50" y1="350" x2="750" y2="350" stroke="#334155" strokeWidth="2" />
+                  <line x1="50" y1="350" x2="50" y2="50" stroke="#334155" strokeWidth="2" />
+                  
+                  <text x="400" y="385" textAnchor="middle" className="text-sm" fill="#475569">x</text>
+                  <text x="25" y="200" textAnchor="middle" className="text-sm" fill="#475569">f(x)</text>
+                  <text x="50" y="370" textAnchor="middle" className="text-xs" fill="#64748b">0</text>
+                  <text x="750" y="370" textAnchor="middle" className="text-xs" fill="#64748b">1</text>
+
+                  <path
+                    d={Array.from({ length: 200 }, (_, i) => {
+                      const x = i / 200;
+                      const y = 4.0 / (1.0 + x * x);
+                      const px = 50 + x * 700;
+                      const py = 350 - (y / 4) * 300;
+                      return i === 0 ? `M ${px} ${py}` : `L ${px} ${py}`;
+                    }).join(' ')}
+                    fill="none"
+                    stroke="#1e293b"
+                    strokeWidth="3"
+                  />
+
+                  {Array.from({ length: numSteps }, (_, i) => {
+                    const step = 1.0 / numSteps;
+                    const x = (i + 0.5) * step;
+                    const fx = calculateFunctionValue(i);
+                    const rank = i % numProcesses;
+                    const isProcessed = i < currentStep;
+                    
+                    const rectX = 50 + (i * step) * 700;
+                    const rectWidth = step * 700;
+                    const rectHeight = (fx / 4) * 300;
+                    const rectY = 350 - rectHeight;
+
+                    return (
+                      <g key={i}>
+                        <rect
+                          x={rectX}
+                          y={rectY}
+                          width={rectWidth}
+                          height={rectHeight}
+                          fill={isProcessed ? processColors[rank % processColors.length] : '#e2e8f0'}
+                          opacity={isProcessed ? 0.7 : 0.3}
+                          stroke={processColors[rank % processColors.length]}
+                          strokeWidth="1"
+                        />
+                        {i === currentStep - 1 && isAnimating && (
+                          <rect
+                            x={rectX}
+                            y={rectY}
+                            width={rectWidth}
+                            height={rectHeight}
+                            fill="none"
+                            stroke="#fbbf24"
+                            strokeWidth="3"
+                          />
+                        )}
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+
+              <div className="bg-white rounded-lg p-6 shadow">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">
+                  Distribuição de Trabalho (i = rank; i &lt; num_steps; i += size)
+                </h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-slate-100">
+                        <th className="px-4 py-2 text-left font-semibold text-slate-700">Rank</th>
+                        <th className="px-4 py-2 text-left font-semibold text-slate-700">Steps Processados</th>
+                        <th className="px-4 py-2 text-left font-semibold text-slate-700">Soma Parcial</th>
+                        <th className="px-4 py-2 text-left font-semibold text-slate-700">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Array.from({ length: numProcesses }, (_, rank) => {
+                        const steps = getProcessSteps(rank);
+                        const processedSteps = steps.filter(s => s < currentStep);
+                        const partialSum = processedSteps.reduce((sum, i) => sum + calculateFunctionValue(i), 0);
+                        const isComplete = processedSteps.length === steps.length && currentStep >= numSteps;
+                        
+                        return (
+                          <tr key={rank} className="border-b border-slate-200">
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="w-4 h-4 rounded"
+                                  style={{ backgroundColor: processColors[rank % processColors.length] }}
+                                />
+                                <span className="font-medium">Rank {rank}</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 font-mono text-xs">
+                              {steps.map((s, idx) => (
+                                <span
+                                  key={s}
+                                  className={`inline-block px-2 py-1 m-0.5 rounded ${
+                                    s < currentStep ? 'bg-green-100 text-green-800' : 'bg-slate-100 text-slate-500'
+                                  }`}
+                                >
+                                  {s}
+                                </span>
+                              ))}
+                            </td>
+                            <td className="px-4 py-3 font-mono text-sm">
+                              {processedSteps.length > 0 ? partialSum.toFixed(6) : '0.000000'}
+                            </td>
+                            <td className="px-4 py-3">
+                              {isComplete ? (
+                                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                                  ✓ Completo
+                                </span>
+                              ) : currentStep > 0 && processedSteps.length > 0 ? (
+                                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                  ⟳ Processando
+                                </span>
+                              ) : (
+                                <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-medium">
+                                  ○ Aguardando
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                {currentStep >= numSteps && (
+                  <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-2 border-blue-200">
+                    <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+                      <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs">MPI_Reduce</span>
+                      Soma Global (Rank 0)
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-slate-600 mb-2">Somas parciais de cada processo:</p>
+                        {Array.from({ length: numProcesses }, (_, rank) => {
+                          const steps = getProcessSteps(rank);
+                          const sum = steps.reduce((s, i) => s + calculateFunctionValue(i), 0);
+                          return (
+                            <div key={rank} className="text-xs font-mono mb-1">
+                              Rank {rank}: {sum.toFixed(8)}
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <p className="text-sm text-slate-600 mb-2">Resultado final:</p>
+                        <p className="text-2xl font-bold text-blue-600">
+                          π ≈ {(
+                            (1.0 / numSteps) *
+                            Array.from({ length: numSteps }, (_, i) => calculateFunctionValue(i)).reduce((a, b) => a + b, 0)
+                          ).toFixed(15)}
+                        </p>
+                        <p className="text-xs text-slate-500 mt-1">
+                          Valor real: π = 3.141592653589793
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 bg-slate-800 text-slate-100 rounded-lg p-6 shadow-lg">
+                <h3 className="text-lg font-semibold mb-3">Explicação do Código MPI</h3>
+                <div className="space-y-3 text-sm font-mono">
+                  <div className="bg-slate-700 p-3 rounded">
+                    <span className="text-blue-300">for</span> (i = rank; i &lt; num_steps; i += size)
+                    <p className="text-xs mt-1 text-slate-300 font-sans">
+                      Cada processo começa do seu rank e pula de size em size
+                    </p>
+                  </div>
+                  <div className="bg-slate-700 p-3 rounded">
+                    MPI_Reduce(&sum, &global_sum, ..., MPI_SUM, 0, ...)
+                    <p className="text-xs mt-1 text-slate-300 font-sans">
+                      Reduz todas as somas parciais em uma única soma no processo de rank 0
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        ReactDOM.render(<MPIIntegrationVisualization />, document.getElementById('root'));
+    </script>
+</body>
+</html>
