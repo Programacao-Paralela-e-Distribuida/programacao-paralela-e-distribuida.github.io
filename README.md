@@ -120,3 +120,12 @@ O Livro está organizado da seguinte maneira:
 <li><a href="https://github.com/Programacao-Paralela-e-Distribuida/ACC/blob/master/docs/Livro_PPD_3.pdf">Slides OpenACC</a></li>
 <li><a href="./calcpi.html">Cálculo de Pi com MPI</a></li>
 </ul>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-9D4F8KS4V7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-9D4F8KS4V7');
+</script>
