@@ -121,11 +121,13 @@ O Livro está organizado da seguinte maneira:
 <li><a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI/blob/main/docs/Livro_PPD_1.pdf">Slides MPI</a></li>
 <li><a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENMP/blob/main/docs/Livro_PPD_2.pdf">Slides OpenMP</a></li>
 <li><a href="https://github.com/Programacao-Paralela-e-Distribuida/ACC/blob/master/docs/Livro_PPD_3.pdf">Slides OpenACC</a></li>
+</ul>
 
 <h2 id="recursos">Ferramentas de Visualização</h2>
 
 <p> Colocamos disopníveis algumas ferramentas de visualiação, para auxiliar no entendimento do funciomanento da distribuição de dados e carga de trabalho entre processos de uma aplicação MPI</p> </p>
 
+<ul>
 <li><a href="./calcpi2.html">Cálculo de Pi com MPI</a></li>
 <li><a href="./primos2.html">Cálculo de primos com MPI</a></li>
 <li><a href="./mxv2.html">Multiplicação de Matriz por Vetor com MPI</a></li>
