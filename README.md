@@ -114,7 +114,9 @@ O Livro está organizado da seguinte maneira:
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENACC">Preparação do ambiente de execução OpenACC</a>
 
 <h2 id="recursos">Recursos</h2>
-  
+
+<p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida"> Repositório com códigos fonte</a></b></p>
+<br>
 <p>Além das instruções para preparação dos diversos ambientes, temos  alguns slides de apoio disponíveis. </p>
 
 <ul>
