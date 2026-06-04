@@ -128,7 +128,7 @@ O Livro está organizado da seguinte maneira:
 
 <li><a href="./calcpi2.html">Cálculo de Pi com MPI</a></li>
 <li><a href="./primos2.html">Cálculo de primos com MPI</a></li>
-<li><a href="./primos2.html">Multiplicação de Matriz por Vetor com MPI</a></li>
+<li><a href="./mxv2.html">Multiplicação de Matriz por Vetor com MPI</a></li>
 </ul>
 
 <!-- Google tag (gtag.js) -->
