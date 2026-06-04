@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contagem de Primos MPI - Visualização</title>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Dicionário de Traduções / Translations Dictionary
+        const translations = {
+          pt: {
+            title: "Contagem de Primos Paralela com MPI",
+            subtitle: "Identificação e contagem de números primos ímpares no intervalo de 3 a N",
+            labelProcesses: "Número de Processos MPI:",
+            labelMaxN: "Valor Máximo (N):",
+            labelLoadDist: "Distribuição de Carga",
+            btnCyclic: "Cíclica (Ímpares)",
+            btnPause: "⏸ Pausar",
+            btnReset: "🔄 Reiniciar",
+            btnStart: "▶ Iniciar",
+            numbers: "números",
+            chartTitle: "Grade de Números Avaliados (3 até N)",
+            chartLegendPrime: "Primo Encontrado",
+            chartLegendComposite: "Número Composto",
+            chartLegendUnprocessed: "Não Processado",
+            tableTitle: "Distribuição de Trabalho e Varredura",
+            tableTitleFormula: "inicio = 3 + rank * 2; salto = num_procs * 2",
+            thRank: "Rank",
+            thNumbers: "Números Avaliados",
+            thPartialSum: "Primos Locais",
+            thStatus: "Status",
+            statusComplete: "✓ Completo",
+            statusProcessing: "⟳ Processando",
+            statusWaiting: "○ Aguardando",
+            globalSumTitle: "Soma Global (Rank 0) via MPI_Reduce",
+            partialSumsLabel: "Contagem parcial de cada processo:",
+            finalResultLabel: "Resultado final consolidado:",
+            realValueLabel: "Nota: O Rank 0 adiciona +1 automaticamente ao total para contabilizar o número 2.",
+            expTitle: "Explicação do Código MPI (mpi_primos.c)",
+            expInitTitle: "1. Inicialização do Intervalo",
+            expInitDesc: "Cada rank calcula seu ponto de partida ímpar: '3 + meu_ranque * 2'. O 'salto' é definido como 'num_procs * 2' para garantir que os processos apenas testem números ímpares de forma intercalada.",
+            expReduceDesc: "As contagens parciais de primos (variável 'cont') são consolidadas em uma única soma total em uma operação de redução 'MPI_SUM' direcionada ao Rank 0."
+          },
+          es: {
+            title: "Conteo de Primos en Paralelo con MPI",
+            subtitle: "Identificación y conteo de números primos impares en el rango de 3 a N",
+            labelProcesses: "Número de Procesos MPI:",
+            labelMaxN: "Valor Máximo (N):",
+            labelLoadDist: "Distribución de Carga",
+            btnCyclic: "Cíclica (Impares)",
+            btnPause: "⏸ Pausar",
+            btnReset: "🔄 Reiniciar",
+            btnStart: "▶ Iniciar",
+            numbers: "números",
+            chartTitle: "Cuadrícula de Números Evaluados (3 hasta N)",
+            chartLegendPrime: "Primo Encontrado",
+            chartLegendComposite: "Número Compuesto",
+            chartLegendUnprocessed: "No Procesado",
+            tableTitle: "Distribución de Trabajo y Escaneo",
+            tableTitleFormula: "inicio = 3 + rank * 2; salto = num_procs * 2",
+            thRank: "Rank",
+            thNumbers: "Números Evaluados",
+            thPartialSum: "Primos Locales",
+            thStatus: "Estado",
+            statusComplete: "✓ Completo",
+            statusProcessing: "⟳ Procesando",
+            statusWaiting: "○ Esperando",
+            globalSumTitle: "Suma Global (Rank 0) vía MPI_Reduce",
+            partialSumsLabel: "Conteo parcial de cada proceso:",
+            finalResultLabel: "Resultado final consolidado:",
+            realValueLabel: "Nota: El Rank 0 añade +1 automáticamente al total para contabilizar el número 2.",
+            expTitle: "Explicación del Código MPI (mpi_primos.c)",
+            expInitTitle: "1. Inicialización del Intervalo",
+            expInitDesc: "Cada rank calcula su punto de partida impar: '3 + meu_ranque * 2'. El salto se define como 'num_procs * 2' para garantizar que los procesos solo prueben números impares de manera intercalada.",
+            expReduceDesc: "Los conteos parciales de primos (variable 'cont') se consolidan en una sola suma total mediante una operación de reducción 'MPI_SUM' dirigida al Rank 0."
+          },
+          en: {
+            title: "Parallel Prime Counting with MPI",
+            subtitle: "Identification and counting of odd prime numbers in the range from 3 to N",
+            labelProcesses: "Number of MPI Processes:",
+            labelMaxN: "Maximum Value (N):",
+            labelLoadDist: "Load Distribution",
+            btnCyclic: "Cyclic (Odds Only)",
+            btnPause: "⏸ Pause",
+            btnReset: "🔄 Restart",
+            btnStart: "▶ Start",
+            numbers: "numbers",
+            chartTitle: "Evaluated Numbers Grid (3 to N)",
+            chartLegendPrime: "Prime Found",
+            chartLegendComposite: "Composite Number",
+            chartLegendUnprocessed: "Unprocessed",
+            tableTitle: "Work Distribution and Scanning",
+            tableTitleFormula: "inicio = 3 + rank * 2; salto = num_procs * 2",
+            thRank: "Rank",
+            thNumbers: "Evaluated Numbers",
+            thPartialSum: "Local Primes",
+            thStatus: "Status",
+            statusComplete: "✓ Complete",
+            statusProcessing: "⟳ Processing",
+            statusWaiting: "○ Waiting",
+            globalSumTitle: "Global Sum (Rank 0) via MPI_Reduce",
+            partialSumsLabel: "Partial count from each process:",
+            finalResultLabel: "Consolidated final result:",
+            realValueLabel: "Note: Rank 0 automatically adds +1 to the total to account for the number 2.",
+            expTitle: "MPI Code Explanation (mpi_primos.c)",
+            expInitTitle: "1. Interval Initialization",
+            expInitDesc: "Each rank calculates its odd starting point: '3 + meu_ranque * 2'. The 'salto' (stride) is set to 'num_procs * 2' ensuring that processes only test odd numbers in an interleaved manner.",
+            expReduceDesc: "The local partial prime counts ('cont' variable) are consolidated into a single master sum using an 'MPI_SUM' reduction operation targeting Rank 0."
+          }
+        };
+
+        const MPIPrimesVisualization = () => {
+          const [lang, setLang] = useState('pt');
+          const [numProcesses, setNumProcesses] = useState(2);
+          const [maxN, setMaxN] = useState(51); 
+          const [isAnimating, setIsAnimating] = useState(false);
+          const [animatedIndex, setAnimatedIndex] = useState(0); // Controla quantos ímpares já foram processados
+
+          const t = translations[lang];
+
+          const processColors = [
+            '#3b82f6', '#ef4444', '#10b981', '#f59e0b',
+            '#8b5cf6', '#ec4899', '#06b6d4', '#f97316',
+          ];
+
+          // Função pura C para verificar primalidade usada no código do usuário
+          const isPrime = (num) => {
+            if (num < 2) return false;
+            if (num === 2) return true;
+            if (num % 2 === 0) return false;
+            for (let i = 3; i <= Math.sqrt(num); i += 2) {
+              if (num % i === 0) return false;
+            }
+            return true;
+          };
+
+          // Gera a lista de números ímpares de 3 até N
+          const getOddNumbers = () => {
+            const list = [];
+            for (let i = 3; i <= maxN; i += 2) {
+              list.push(i);
+            }
+            return list;
+          };
+
+          const oddNumbers = getOddNumbers();
+
+          // Retorna os números atribuídos a um Rank específico
+          const getRankNumbers = (rank) => {
+            const list = [];
+            const inicio = 3 + rank * 2;
+            const salto = numProcesses * 2;
+            for (let i = inicio; i <= maxN; i += salto) {
+              list.push(i);
+            }
+            return list;
+          };
+
+          // Retorna qual Rank é responsável por testar um determinado número ímpar
+          const getRankOfNumber = (num) => {
+            return ((num - 3) / 2) % numProcesses;
+          };
+
+          useEffect(() => {
+            let interval;
+            if (isAnimating) {
+              interval = setInterval(() => {
+                setAnimatedIndex(prev => {
+                  if (prev >= oddNumbers.length) {
+                    setIsAnimating(false);
+                    return oddNumbers.length;
+                  }
+                  return prev + 1;
+                });
+              }, 150);
+            }
+            return () => clearInterval(interval);
+          }, [isAnimating, oddNumbers.length]);
+
+          const handleReset = () => {
+            setAnimatedIndex(0);
+            setIsAnimating(false);
+          };
+
+          const handlePlayPause = () => {
+            if (animatedIndex >= oddNumbers.length) {
+              handleReset();
+            }
+            setIsAnimating(!isAnimating);
+          };
+
+          return (
+            <div className="w-full max-w-6xl mx-auto p-6 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg my-8 relative">
+              
+              {/* Seletor de Idiomas */}
+              <div className="absolute top-4 right-6 flex gap-2 bg-white px-2 py-1.5 rounded-lg shadow-sm border border-slate-200 z-10">
+                <button onClick={() => setLang('pt')} className={`text-xl p-1 rounded hover:bg-slate-100 transition ${lang === 'pt' ? 'bg-slate-200 ring-1 ring-blue-400' : ''}`} title="Português">🇧🇷</button>
+                <button onClick={() => setLang('es')} className={`text-xl p-1 rounded hover:bg-slate-100 transition ${lang === 'es' ? 'bg-slate-200 ring-1 ring-blue-400' : ''}`} title="Español">🇪🇸</button>
+                <button onClick={() => setLang('en')} className={`text-xl p-1 rounded hover:bg-slate-100 transition ${lang === 'en' ? 'bg-slate-200 ring-1 ring-blue-400' : ''}`} title="English">🇺🇸</button>
+              </div>
+
+              <h1 className="text-3xl font-bold text-slate-800 mb-2 text-center pr-24">
+                {t.title}
+              </h1>
+              <p className="text-center text-slate-600 mb-6 pr-24 text-sm md:text-base">
+                {t.subtitle}
+              </p>
+
+              {/* Controles do Painel */}
+              <div className="bg-white rounded-lg p-4 mb-6 shadow">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {t.labelProcesses} {numProcesses}
+                    </label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="8"
+                      value={numProcesses}
+                      onChange={(e) => {
+                        setNumProcesses(parseInt(e.target.value));
+                        handleReset();
+                      }}
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {t.labelMaxN} {maxN}
+                    </label>
+                    <input
+                      type="range"
+                      min="15"
+                      max="101"
+                      step="2"
+                      value={maxN}
+                      onChange={(e) => {
+                        setMaxN(parseInt(e.target.value));
+                        handleReset();
+                      }}
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {t.labelLoadDist}
+                    </label>
+                    <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+                      <div className="flex-1 text-center text-xs py-2 px-3 rounded-md font-semibold bg-white shadow text-blue-600">
+                        {t.btnCyclic}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-end gap-2">
+                    <button
+                      onClick={handlePlayPause}
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition font-medium"
+                    >
+                      {isAnimating ? t.btnPause : animatedIndex >= oddNumbers.length ? t.btnReset : t.btnStart}
+                    </button>
+                    <button
+                      onClick={handleReset}
+                      className="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg transition"
+                    >
+                      ↻
+                    </button>
+                  </div>
+                </div>
+
+                {/* Legendas dos Processos / Cores */}
+                <div className="flex flex-wrap gap-3 justify-center border-t border-slate-100 pt-3">
+                  {Array.from({ length: numProcesses }, (_, rank) => (
+                    <div key={rank} className="flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-md border border-slate-200">
+                      <div
+                        className="w-4 h-4 rounded"
+                        style={{ backgroundColor: processColors[rank % processColors.length] }}
+                      />
+                      <span className="text-sm font-medium text-slate-700">
+                        Rank {rank} ({getRankNumbers(rank).length} {t.numbers})
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Grade de Visualização dos Primos */}
+              <div className="bg-white rounded-lg p-6 mb-6 shadow">
+                <h3 className="text-lg font-semibold text-slate-800 mb-2">
+                  {t.chartTitle}
+                </h3>
+                
+                {/* Legenda de Estados dos Números */}
+                <div className="flex gap-4 mb-4 text-xs font-medium text-slate-600">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-3 h-3 bg-emerald-500 rounded border border-emerald-600" /> {t.chartLegendPrime}
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-3 h-3 bg-slate-300 rounded border border-slate-400" /> {t.chartLegendComposite}
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-3 h-3 bg-slate-100 rounded border border-slate-200 border-dashed" /> {t.chartLegendUnprocessed}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-6 sm:grid-cols-10 md:grid-cols-12 gap-2">
+                  {oddNumbers.map((num, idx) => {
+                    const rank = getRankOfNumber(num);
+                    const isProcessed = idx < animatedIndex;
+                    const prime = isPrime(num);
+                    const isCurrent = idx === animatedIndex - 1 && isAnimating;
+
+                    let bgStyle = "bg-slate-100 border-dashed border-slate-200 text-slate-400";
+                    if (isProcessed) {
+                      bgStyle = prime 
+                        ? "bg-emerald-500 text-white border-emerald-600 font-bold" 
+                        : "bg-slate-300 text-slate-600 border-slate-400 font-light";
+                    }
+
+                    return (
+                      <div 
+                        key={num} 
+                        className={`p-2 rounded-lg text-center border text-sm transition-all relative ${bgStyle} ${isCurrent ? 'ring-4 ring-amber-400 scale-105 z-10' : ''}`}
+                      >
+                        <span className="block text-base">{num}</span>
+                        <span 
+                          className="absolute bottom-0.5 right-1 text-[9px] font-mono opacity-80"
+                          style={{ color: isProcessed && prime ? '#fff' : processColors[rank % processColors.length] }}
+                        >
+                          R{rank}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Tabela de Status e Carga de Trabalho */}
+              <div className="bg-white rounded-lg p-6 shadow">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">
+                  {t.tableTitle} <span className="text-xs font-mono font-normal bg-slate-100 text-slate-600 px-2 py-1 rounded ml-2">{t.tableTitleFormula}</span>
+                </h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-slate-100">
+                        <th className="px-4 py-2 text-left font-semibold text-slate-700">{t.thRank}</th>
+                        <th className="px-4 py-2 text-left font-semibold text-slate-700">{t.thNumbers}</th>
+                        <th className="px-4 py-2 text-left font-semibold text-slate-700">{t.thPartialSum}</th>
+                        <th className="px-4 py-2 text-left font-semibold text-slate-700">{t.thStatus}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Array.from({ length: numProcesses }, (_, rank) => {
+                        const allRankNums = getRankNumbers(rank);
+                        const processedRankNums = allRankNums.filter(n => oddNumbers.indexOf(n) < animatedIndex);
+                        const localPrimesCount = processedRankNums.filter(isPrime).length;
+                        const isComplete = processedRankNums.length === allRankNums.length && animatedIndex >= oddNumbers.length;
+                        
+                        return (
+                          <tr key={rank} className="border-b border-slate-200">
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="w-4 h-4 rounded"
+                                  style={{ backgroundColor: processColors[rank % processColors.length] }}
+                                />
+                                <span className="font-medium">Rank {rank}</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 font-mono text-xs max-w-md wrap">
+                              {allRankNums.map((n) => {
+                                const checked = oddNumbers.indexOf(n) < animatedIndex;
+                                const isP = isPrime(n);
+                                return (
+                                  <span
+                                    key={n}
+                                    className={`inline-block px-1.5 py-0.5 m-0.5 rounded text-xs border ${
+                                      checked 
+                                        ? isP ? 'bg-emerald-100 text-emerald-800 border-emerald-300' : 'bg-slate-200 text-slate-500 border-slate-300'
+                                        : 'bg-slate-50 text-slate-400 border-slate-100'
+                                    }`}
+                                  >
+                                    {n}
+                                  </span>
+                                );
+                              })}
+                            </td>
+                            <td className="px-4 py-3 font-mono text-sm font-bold text-slate-700">
+                              {localPrimesCount}
+                            </td>
+                            <td className="px-4 py-3">
+                              {isComplete ? (
+                                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                                  {t.statusComplete}
+                                </span>
+                              ) : animatedIndex > 0 && processedRankNums.length > 0 ? (
+                                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                  {t.statusProcessing}
+                                </span>
+                              ) : (
+                                <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-medium">
+                                  {t.statusWaiting}
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Box de Redução e Resultado Final */}
+                {animatedIndex >= oddNumbers.length && (
+                  <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-2 border-blue-200">
+                    <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+                      <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs">MPI_Reduce</span>
+                      {t.globalSumTitle}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-slate-600 mb-2">{t.partialSumsLabel}</p>
+                        {Array.from({ length: numProcesses }, (_, rank) => {
+                          const pCount = getRankNumbers(rank).filter(isPrime).length;
+                          return (
+                            <div key={rank} className="text-xs font-mono mb-1">
+                              Rank {rank}: <span className="font-bold text-slate-700">{pCount} primos encontrados</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col justify-center">
+                        <p className="text-sm text-slate-600 mb-1">{t.finalResultLabel}</p>
+                        <p className="text-3xl font-bold text-blue-600">
+                          Total = {oddNumbers.filter(isPrime).length + 1}
+                        </p>
+                        <p className="text-xs text-amber-600 mt-1 font-medium bg-amber-50 p-1.5 rounded border border-amber-200">
+                          ⚠️ {t.realValueLabel}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Bloco explicativo do Código C */}
+              <div className="mt-6 bg-slate-800 text-slate-100 rounded-lg p-6 shadow-lg">
+                <h3 className="text-lg font-semibold mb-4">{t.expTitle}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm font-mono">
+                  <div className="p-3 rounded bg-slate-700 ring-2 ring-blue-500">
+                    <h4 className="font-sans font-bold text-xs text-blue-400 uppercase tracking-wider mb-2">{t.expInitTitle}</h4>
+                    <span className="text-amber-400">inicio</span> = 3 + meu_ranque * 2;<br />
+                    <span className="text-amber-400">salto</span> = num_procs * 2;<br />
+                    <span className="text-blue-300">for</span> (i = inicio; i &lt;= n; i += salto)
+                    <p className="text-xs mt-2 text-slate-300 font-sans">
+                      {t.expInitDesc}
+                    </p>
+                  </div>
+                  
+                  <div className="p-3 rounded bg-slate-700/60 flex flex-col justify-between">
+                    <div>
+                      <h4 className="font-sans font-bold text-xs text-blue-400 uppercase tracking-wider mb-2">2. MPI_Reduce</h4>
+                      <span className="text-blue-300">MPI_Reduce</span>(&amp;cont, &amp;total, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+                    </div>
+                    <p className="text-xs mt-2 text-slate-300 font-sans">
+                      {t.expReduceDesc}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          );
+        };
+
+        ReactDOM.render(<MPIPrimesVisualization />, document.getElementById('root'));
+    </script>
+</body>
+</html>
