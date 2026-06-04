@@ -125,7 +125,7 @@ O Livro está organizado da seguinte maneira:
 
 <h2 id="recursos">Ferramentas de Visualização</h2>
 
-<p> Colocamos disponíveis algumas ferramentas de visualiação, disponíveis em português, espanho e inglês, para auxiliar no entendimento do funciomanento da distribuição de dados e carga de trabalho entre processos de uma aplicação MPI.</p> </p>
+<p> Colocamos disponíveis algumas ferramentas de visualiação, disponíveis em português, espanho e inglês, para auxiliar no entendimento do funciomanento da distribuição de dados e carga de trabalho entre processos de uma aplicação MPI.</p>
 
 <ul>
 <li><a href="./calcpi2.html">Cálculo de Pi com MPI</a></li>
