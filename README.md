@@ -1,7 +1,7 @@
 <meta name="description" content="Livro de Programação Paralela e Distribuída">
 <meta name="keywords" content="programação paralela, programação distribuída, linguagem C, OpenMP, MPI, OpenACC, tasks, exemplos, recursos, slides, computação, ensino, brasil, português, ensino de computação, ensino de programação, paralelismo">
 
-# Programação Paralela e Distribuída
+# Programação Paralela e Distribuída - </small> com MPI, OpenMP e OpenACc</small>
 
 > _"Dar-me-eis um grão de trigo pela primeira casa do tabuleiro; dois pela segunda, quatro pela terceira, oito pela quarta, e, assim dobrando sucessivamente, até a sexagésima quarta e última casa do tabuleiro. Peço-vos, ó rei, de acordo com a vossa magnânima oferta, que autorizeis o pagamento em grãos de trigo, e assim como indiquei!"_ Malba Tahan, O Homem que Calculava.
 
@@ -10,6 +10,10 @@
 <p align="center">
   <img src="Capa.webp" width="300" height="400">
 </p>
+
+## Aquisição 
+
+   O livro pode ser adquirido no formato impresso ou e-book no site da editora [Casa do Código](https://www.casadocodigo.com.br/pages/sumario-programacao-paralela).
 
 ## Apresentação
 
@@ -128,7 +132,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <h2 id="recursos">Recursos</h2>
 
 - <p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida"> Repositório com códigos fonte</a></b></p>
-<p>Além das instruções para preparação dos diversos ambientes, temos  alguns slides de apoio disponíveis. </p>
+<p>Alguns slides de apoio para os professores estão disponíveis a seguir. </p>
 
 <ul>
 <li><a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI/blob/main/docs/Livro_PPD_1.pdf">Slides MPI</a></li>
