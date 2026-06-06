@@ -1,7 +1,7 @@
 <meta name="description" content="Livro de Programação Paralela e Distribuída">
 <meta name="keywords" content="programação paralela, programação distribuída, linguagem C, OpenMP, MPI, OpenACC, tasks, exemplos, recursos, slides, computação, ensino, brasil, português, ensino de computação, ensino de programação, paralelismo">
 
-# Programação Paralela e Distribuída - </small> com MPI, OpenMP e OpenACc</small>
+# Programação Paralela e Distribuída - <span style="font-size: 0.8em;">com MPI, OpenMP e OpenACC</span>
 
 > _"Dar-me-eis um grão de trigo pela primeira casa do tabuleiro; dois pela segunda, quatro pela terceira, oito pela quarta, e, assim dobrando sucessivamente, até a sexagésima quarta e última casa do tabuleiro. Peço-vos, ó rei, de acordo com a vossa magnânima oferta, que autorizeis o pagamento em grãos de trigo, e assim como indiquei!"_ Malba Tahan, O Homem que Calculava.
 
