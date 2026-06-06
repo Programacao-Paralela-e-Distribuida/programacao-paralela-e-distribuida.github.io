@@ -17,7 +17,7 @@
   
   <summary>Clique aqui para ver mais detalhes</summary>
 
-A pesquisa científica moderna, em diversas áreas de conhecimento, tem desenvolvido modelos computacionais sofisticados para solucionar problemas cada vez mais complexos. Esses modelos são transformados em aplicações paralelas que realizam simulações visando obter, no menor prazo possível, aproximações cada vez mais precisas da realidade.<br>
+<br>A pesquisa científica moderna, em diversas áreas de conhecimento, tem desenvolvido modelos computacionais sofisticados para solucionar problemas cada vez mais complexos. Esses modelos são transformados em aplicações paralelas que realizam simulações visando obter, no menor prazo possível, aproximações cada vez mais precisas da realidade.<br>
 
 Essas aplicações paralelas são construídas utilizando interfaces de programação e bibliotecas associadas a linguagens de programação convencionais, como **C** e **FORTRAN**, e fazendo uso de plataformas de computação paralela, como _clusters_, sistemas multiprocessadores de memória compartilhada e aceleradores com alto poder computacional para alcançar o desempenho desejado.<br>
 
@@ -50,7 +50,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
   
   <summary>Clique aqui para ver mais detalhes</summary>
   
-O Livro está organizado da seguinte maneira:
+<br>O Livro está organizado da seguinte maneira:
 
 1. Introdução
    - Exemplos de aplicações paralelas
