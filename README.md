@@ -40,10 +40,12 @@ Ao longo deste livro são apresentados exemplos simples e objetivos para o uso d
 No repositório [Programação Paralela e Distribuída](https://github.com/Programacao-Paralela-e-Distribuida) estão disponíveis os códigos fontes de todos os exemplos utilizados no livro, que pode ser adquirido direto do site da editora [Casa do Código](https://www.casadocodigo.com.br/pages/sumario-programacao-paralela).
 
 Esperamos que este livro possa ser um guia seguro para os passos iniciais das pessoas interessadas no uso da programação paralela de uma forma eficiente e produtiva.
-
 </details>
+
 ## Conteúdo
 
+<details>
+  <summary>Clique aqui para ver mais detalhes</summary>
 O Livro está organizado da seguinte maneira:
 
 1. Introdução
@@ -116,6 +118,7 @@ O Livro está organizado da seguinte maneira:
    - <a href="https://programacao-paralela-e-distribuida.github.io/MPI/docs/MIP-2024.pdf">Preparação do ambiente de execução MPI</a>
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENMP">Preparação do ambiente de execução OpenMP</a>
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENACC">Preparação do ambiente de execução OpenACC</a>
+</details>
 
 <h2 id="recursos">Recursos</h2>
 
