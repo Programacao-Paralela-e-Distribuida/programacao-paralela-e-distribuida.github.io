@@ -2,6 +2,10 @@
 ---
 @import "{{ site.theme }}";
 
+.body {
+    background-color: #e0f2fe; 
+}
+
 .markdown-body details {
   border: 1px solid #d0d7de;
   border-radius: 6px;
