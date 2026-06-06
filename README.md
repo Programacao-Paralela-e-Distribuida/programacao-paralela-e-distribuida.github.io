@@ -56,19 +56,19 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
   
 <br>O Livro está organizado da seguinte maneira:
 
-1. Introdução
+1. **Introdução**
    - Exemplos de aplicações paralelas
    - MPI
    - OpenMP
    - OpenACC
-2. Conceitos básicos
+2. **Conceitos básicos**
    - Processos e Threads
    - Programação paralela
    - Balanceamento de carga
    - Avaliação de desempenho
    - Arquiteturas paralelas
    - Exercícios propostos
-3. Comunicação ponto a ponto no MPI
+3. **Comunicação ponto a ponto no MPI**
    - Introdução
    - Comunicadores
    - Exemplo de um programa em MPI
@@ -78,7 +78,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
    - Algumas recomendações
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI">Estudo de caso: método do trapézio</a>
    - Exercícios propostos
-4. Comunicação coletiva no MPI
+4. **Comunicação coletiva no MPI**
    - Barreira
    - Difusão
    - Distribuição
@@ -90,7 +90,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
    - Algumas observações
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI">Estudo de caso: multiplicação de matriz por vetor</a>
    - Exercícios propostos
-5. Comunicação MPI em detalhes
+5. **Comunicação MPI em detalhes**
    - Introdução
    - Rotinas de envio e recepção bloqueantes
    - Rotinas de envio e recepção não bloqueantes
@@ -100,7 +100,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
    - Considerações de desempenho
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI">Estudo de caso: números primos</a>
    - Exercícios propostos
-6. OpenMP
+6. **OpenMP**
    - Introdução
    - Diretivas principais
    - Funções OPENMP
@@ -110,7 +110,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
    - Erros comuns e recomendações
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENMP">Estudos de caso</a>
    - Exercícios
-7. OpenACC
+7. **OpenACC**
    - Modelo de programação OpenACC
    - Diretivas principais
    - Movimentação de dados
@@ -122,7 +122,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
    - Erros comuns e recomendações
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENACC">Estudos de caso</a>
    - Exercícios
-8. Ambientes de execução
+8. **Ambientes de execução**
    - <a href="https://programacao-paralela-e-distribuida.github.io/MPI/docs/MIP-2024.pdf">Preparação do ambiente de execução MPI</a>
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENMP">Preparação do ambiente de execução OpenMP</a>
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENACC">Preparação do ambiente de execução OpenACC</a>
