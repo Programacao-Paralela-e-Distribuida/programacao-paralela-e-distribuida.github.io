@@ -7,7 +7,7 @@
 
 ---
 
-<p>
+<p align="center">
   <img src="Capa.webp" width="300" height="400">
 </p>
 
