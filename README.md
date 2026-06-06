@@ -13,7 +13,7 @@
 
 ## Apresentação
 
-<details>
+<details markdown="1">
   
   <summary>Clique aqui para ver mais detalhes</summary>
 
@@ -46,7 +46,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 
 ## Conteúdo
 
-<details>
+<details markdown="1">
   
   <summary>Clique aqui para ver mais detalhes</summary>
   
