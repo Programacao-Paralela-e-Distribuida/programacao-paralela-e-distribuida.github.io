@@ -8,7 +8,7 @@
 
 ---
 
-<table align="center" width="80%" border="1" cellpadding="100" cellspacing="0">
+<table align="center" width="80%" cellpadding="100" cellspacing="100">
 <tr>
 <td width="50%" align="center">
   <img src="Capa.webp" width="300" height="400">
