@@ -6,17 +6,17 @@
 > _"Dar-me-eis um grão de trigo pela primeira casa do tabuleiro; dois pela segunda, quatro pela terceira, oito pela quarta, e, assim dobrando sucessivamente, até a sexagésima quarta e última casa do tabuleiro. Peço-vos, ó rei, de acordo com a vossa magnânima oferta, que autorizeis o pagamento em grãos de trigo, e assim como indiquei!"_ Malba Tahan, O Homem que Calculava.
 
 ---
-<table align="center">
+
+<table>
 <tr>
-<td><p align="center">
+<td>
   <img src="Capa.webp" width="300" height="400">
-</p>
 </td>
-<td><p align="center">
+<td>
 <img src="Capa2.jpg" width="300" height="400">
-</p>
 </td>
 </tr>
+</table>
 
 ## Aquisição 
 
