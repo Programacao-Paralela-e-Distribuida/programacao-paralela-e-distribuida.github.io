@@ -11,10 +11,10 @@
 <table align="center" width="80%" cellpadding="100" cellspacing="100">
 <tr>
 <td width="50%" align="center">
-  <img src="Capa.webp" width="300" height="400">
+<a href="https://www.casadocodigo.com.br/products/livro-programacao-paralela"><img src="Capa.webp" width="300" height="400"></a>
 </td>
 <td  width="50%"  align="center">
-<img src="Capa2.jpg" width="300" height="400">
+<a href="https://www.casadocodigo.com.br/products/livro-paralela-arquiteturas-hibridas"><img src="Capa2.jpg" width="300" height="400"></a>
 </td>
 </tr>
 </table>
