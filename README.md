@@ -150,12 +150,14 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 
 <h2 id="recursos">Ferramentas de Visualização</h2>
 
-<p> Colocamos disponíveis algumas ferramentas de visualização, disponíveis em português, espanhol e inglês, para auxiliar no entendimento do funcionamento da distribuição de dados e carga de trabalho entre processos de uma aplicação MPI.</p>
+<p> Colocamos disponíveis algumas ferramentas de visualização, disponíveis em português, espanhol e inglês, para auxiliar no entendimento do funcionamento da distribuição de dados e carga de trabalho entre processos/*threads* de uma aplicação MPI ou OpenMP.</p>
 
 <ul>
 <li><a href="./calcpi2.html">Cálculo de Pi com MPI</a></li>
 <li><a href="./primos2.html">Cálculo de primos com MPI</a></li>
 <li><a href="./mxv2.html">Multiplicação de Matriz por Vetor com MPI</a></li>
+<li><a href="./simulador-openmp.html">Escalonamento das iterações de um laço em OpenMP</a></li>
+
 </ul>
 
 <!-- Google tag (gtag.js) -->
