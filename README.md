@@ -143,9 +143,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <p>Alguns slides de apoio para os professores estão disponíveis a seguir. </p>
 
 <ul>
-<li><a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI/blob/main/docs/Livro_PPD_1.pdf">Slides MPI</a></li>
-<li><a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENMP/blob/main/docs/Livro_PPD_2.pdf">Slides OpenMP</a></li>
-<li><a href="https://github.com/Programacao-Paralela-e-Distribuida/ACC/blob/master/docs/Livro_PPD_3.pdf">Slides OpenACC</a></li>
+<li><a href="https://github.com/Programacao-Paralela-e-Distribuida/README">Slides de Apoio</a></li>
 </ul>
 
 <h2 id="recursos">Ferramentas de Visualização</h2>
