@@ -143,7 +143,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <p>Alguns slides de apoio para os professores estão disponíveis a seguir. </p>
 
 <ul>
-<li>[Slides de Apoio](slides/index.md)</li>
+<li><a href="slides/index.md">Slides de Apoio</a></li>
 </ul>
 
 <h2 id="recursos">Ferramentas de Visualização</h2>
