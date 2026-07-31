@@ -143,7 +143,10 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <p>Alguns slides de apoio para os professores estão disponíveis a seguir. </p>
 
 <ul>
-<li><a href="slides/Hibrida.pdf">Programação Híbrida</a></li>
+<li><a href="slides/MPI.pdf">MPI</a></li>
+<li><a href="slides/OpenMP.pdf">OpenMP</a></li>
+<li><a href="slides/OpenACC.pdf">OpenACC</a></li>
+<li><a href="slides/Hibrida.pdf">Programação Hibrida</a></li>
 </ul>
 
 <h2 id="recursos">Ferramentas de Visualização</h2>
