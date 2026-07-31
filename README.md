@@ -143,7 +143,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <p>Alguns slides de apoio para os professores estão disponíveis a seguir. </p>
 
 <ul>
-<li><a href="https://github.com/Programacao-Paralela-e-Distribuida/README.html">Slides de Apoio</a></li>
+<li><a href="https://github.com/Programacao-Paralela-e-Distribuida/slides/README.md">Slides de Apoio</a></li>
 </ul>
 
 <h2 id="recursos">Ferramentas de Visualização</h2>
