@@ -146,6 +146,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <li><a href="slides/MPI.pdf">MPI</a></li>
 <li><a href="slides/OpenMP.pdf">OpenMP</a></li>
 <li><a href="slides/OpenACC.pdf">OpenACC</a></li>
+<li><a href="slides/OpenMPTasks.pdf">OpenMP Tasks</a></li>
 <li><a href="slides/Hibrida.pdf">Programação Hibrida</a></li>
 </ul>
 
