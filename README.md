@@ -180,15 +180,21 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 -->
 <h2 id="recursos">Recursos</h2>
 
-- <p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida"> Repositório com códigos fonte</a></b></p>
+- <p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida"> Repositório com códigos fonte para ambos os livros.</a></b></p>
 <p>Alguns slides de apoio para os professores estão disponíveis a seguir. </p>
 
+<ul>
+<li>  Livro 1 - MPI, OpenMP e OpenACC</li>
 <ul>
 <li><a href="slides/MPI.pdf">MPI</a></li>
 <li><a href="slides/OpenMP.pdf">OpenMP</a></li>
 <li><a href="slides/OpenACC.pdf">OpenACC</a></li>
+</ul>
+<li>  Livro 2 - OpenMP Tasks, OpenMP offloading e Programação Híbrida</li>
+<ul>
 <li><a href="slides/OpenMPTasks.pdf">OpenMP Tasks</a></li>
 <li><a href="slides/Hibrida.pdf">Programação Hibrida</a></li>
+</ul>
 </ul>
 
 <h2 id="recursos">Ferramentas de Visualização</h2>
@@ -196,13 +202,15 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <p> Colocamos disponíveis algumas ferramentas de visualização, disponíveis em português, espanhol e inglês, para auxiliar no entendimento do funcionamento da distribuição de dados e carga de trabalho entre processos/*threads* de uma aplicação MPI ou OpenMP.</p>
 
 <ul>
+<li>  Livro 1 - MPI, OpenMP e OpenACC</li>
+<ul>
 <li><a href="./interactive-tools/calcpi2.html">Cálculo de Pi com MPI</a></li>
 <li><a href="./interactive-tools/primos2.html">Cálculo de primos com MPI</a></li>
 <li><a href="./interactive-tools/mxv2.html">Multiplicação de Matriz por Vetor com MPI</a></li>
 <li><a href="./interactive-tools/simulador-openmp.html">Escalonamento das iterações de um laço em OpenMP</a></li>
 <li><a href="./interactive-tools/simulador-openmp-collapse-tile.html">O funcionamento da cláusula <b>collapse</b> no OpenMP</a></li>
 <li><a href="./interactive-tools/simulador-openacc-collapse-tile.html">O funcionamento da cláusula <b>collapse</b> no OpenACC</a></li>
-
+</ul>
 </ul>
 
 <!-- Google tag (gtag.js) -->
