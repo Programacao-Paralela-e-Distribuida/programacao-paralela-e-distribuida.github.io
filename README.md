@@ -199,7 +199,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 
 <h2 id="recursos">Ferramentas de Visualização</h2>
 
-<p> Colocamos disponíveis algumas ferramentas de visualização, disponíveis em português, espanhol e inglês, para auxiliar no entendimento do funcionamento da distribuição de dados e carga de trabalho entre processos/*threads* de uma aplicação MPI ou OpenMP.</p>
+<p> Colocamos disponíveis algumas ferramentas de visualização, disponíveis em português, espanhol e inglês, para auxiliar no entendimento do funcionamento da distribuição de dados e carga de trabalho entre processos/<em>threads</em> de uma aplicação MPI ou OpenMP.</p>
 
 <ul>
 <li>  Livro 1 - MPI, OpenMP e OpenACC</li>
