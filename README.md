@@ -63,6 +63,7 @@ São abordados o modelo de tarefas do OpenMP, a transferência de processamento 
 
    Os livros acima podem ser adquiridos no formato impresso ou e-book no site da editora [Casa do Código](https://www.casadocodigo.com.br/pages/sumario-programacao-paralela).
 
+<!--
 ## Apresentação
 
 <details markdown="1">
@@ -176,7 +177,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
    - <a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENACC">Preparação do ambiente de execução OpenACC</a>
    
 </details>
-
+-->
 <h2 id="recursos">Recursos</h2>
 
 - <p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida"> Repositório com códigos fonte</a></b></p>
