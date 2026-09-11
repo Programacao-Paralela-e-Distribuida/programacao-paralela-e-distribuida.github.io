@@ -178,9 +178,15 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
    
 </details>
 -->
-<h2 id="recursos">Recursos</h2>
-
-- <p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida"> Repositório com códigos fonte para ambos os livros.</a></b></p>
+<h2 id="recursos">Repositórios</h2>
+<ul>
+<li><p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI"> Repositório com códigos fonte MPI para o Livro 1.</a></b></p></li>
+- <p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida/OPEMMP"> Repositório com códigos fonte para os Livros 1 e 2.</a></b></p></li>
+- <p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida/OpenACC"> Repositório com códigos fonte para os Livros 1 e 2.</a></b></p></li>
+- <p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida/HIBRIDA"> Repositório com códigos fonte para o Livro 2.</a></b></p></li>
+- <p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida/SERIAL"> Repositório com códigos fonte para os Livros 1 e 2.</a></b></p></li>
+</ul>
+<h2 id="recursos">Slides</h2>
 <p>Alguns slides de apoio para os professores estão disponíveis a seguir. </p>
 
 <ul>
