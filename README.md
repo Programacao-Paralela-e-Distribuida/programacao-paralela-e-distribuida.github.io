@@ -208,8 +208,8 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <li><a href="./interactive-tools/primos2.html">Cálculo de primos com MPI</a></li>
 <li><a href="./interactive-tools/mxv2.html">Multiplicação de Matriz por Vetor com MPI</a></li>
 <li><a href="./interactive-tools/simulador-openmp.html">Escalonamento das iterações de um laço em OpenMP</a></li>
-<li><a href="./interactive-tools/simulador-openmp-collapse-tile.html">O funcionamento da cláusula <b>collapse</b> no OpenMP</a></li>
-<li><a href="./interactive-tools/simulador-openacc-collapse-tile.html">O funcionamento da cláusula <b>collapse</b> no OpenACC</a></li>
+<li><a href="./interactive-tools/simulador-openmp-collapse-tile.html">Funcionamento da cláusula <b>collapse</b> no OpenMP</a></li>
+<li><a href="./interactive-tools/simulador-openacc-collapse-tile.html">Funcionamento da cláusula <b>collapse</b> no OpenACC</a></li>
 </ul>
 </ul>
 
