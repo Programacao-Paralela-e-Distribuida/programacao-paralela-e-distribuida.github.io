@@ -17,6 +17,24 @@ O primeiro volume introduz os fundamentos da programação paralela, a avaliaç�
 
 Os dois livros são acompanhados por programas em C, exercícios, estudos de caso, slides, notebooks de laboratório e ferramentas interativas. Esses recursos podem ser utilizados em conjunto com os livros ou selecionados individualmente por estudantes, professores e profissionais.
 
+<table align="center" width="80%" cellpadding="100" cellspacing="100">
+<tr>
+<td width="50%" align="center">
+
+<H3>Programação Paralela e Distribuída com MPI, OpenMP e OpenACC</H3>
+
+O primeiro volume constitui o ponto de entrada da coleção. Apresenta os conceitos fundamentais da programação paralela, as principais métricas de desempenho e três modelos amplamente utilizados na computação de alto desempenho: MPI, para sistemas de memória distribuída; OpenMP, para sistemas de memória compartilhada; e OpenACC, para aceleradores.
+
+<B>Indicado para:</B> estudantes de graduação, profissionais que estão iniciando seus estudos em programação paralela e disciplinas introdutórias de computação de alto desempenho.
+
+<B>Principais temas:</B fundamentos da programação paralela, balanceamento de carga, avaliação de desempenho, MPI, OpenMP, OpenACC e ambientes de execução.
+
+</td>
+<td  width="50%"  align="center">
+<a href="https://www.casadocodigo.com.br/products/livro-programacao-paralela"><img src="Capa.webp" width="300" height="400"></a>
+</td>
+</tr>
+</table>
 
 <table align="center" width="80%" cellpadding="100" cellspacing="100">
 <tr>
