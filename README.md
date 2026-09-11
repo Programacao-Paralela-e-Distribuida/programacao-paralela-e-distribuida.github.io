@@ -1,12 +1,22 @@
-<meta name="description" content="Livro de Programação Paralela e Distribuída">
+<meta name="description" content="Programação Paralela e Distribuída — Livros e Recursos Educacionais">
 <meta name="keywords" content="programação paralela, programação distribuída, linguagem C, OpenMP, MPI, OpenACC, tasks, exemplos, recursos, slides, computação, ensino, brasil, português, ensino de computação, ensino de programação, paralelismo">
 
-# Programação Paralela e Distribuída
-# Programação Paralela para Arquiteturas Híbridas
+# Programação Paralela e Distribuída — Livros e Recursos Educacionais
 
 > _"Dar-me-eis um grão de trigo pela primeira casa do tabuleiro; dois pela segunda, quatro pela terceira, oito pela quarta, e, assim dobrando sucessivamente, até a sexagésima quarta e última casa do tabuleiro. Peço-vos, ó rei, de acordo com a vossa magnânima oferta, que autorizeis o pagamento em grãos de trigo, e assim como indiquei!"_ Malba Tahan, O Homem que Calculava.
 
 ---
+
+## Programação Paralela e Distribuída
+
+### Uma trajetória de aprendizagem em dois volumes
+
+Esta coleção apresenta uma trajetória progressiva para o estudo da programação paralela e distribuída, desde os conceitos fundamentais e os principais modelos de programação até o desenvolvimento de aplicações para arquiteturas híbridas e heterogêneas.
+
+O primeiro volume introduz os fundamentos da programação paralela, a avaliação de desempenho e os modelos MPI, OpenMP e OpenACC. O segundo aprofunda esses conhecimentos, abordando arquiteturas paralelas, tarefas, aceleradores, múltiplas GPUs, transferência de processamento e programação híbrida.
+
+Os dois livros são acompanhados por programas em C, exercícios, estudos de caso, slides, notebooks de laboratório e ferramentas interativas. Esses recursos podem ser utilizados em conjunto com os livros ou selecionados individualmente por estudantes, professores e profissionais.
+
 
 <table align="center" width="80%" cellpadding="100" cellspacing="100">
 <tr>
@@ -18,6 +28,8 @@
 </td>
 </tr>
 </table>
+
+
 
 ## Aquisição 
 
