@@ -39,7 +39,17 @@ O primeiro volume constitui o ponto de entrada da coleção. Apresenta os concei
 <table align="center" width="80%" cellpadding="100" cellspacing="100">
 <tr>
 <td width="50%" align="center">
-<a href="https://www.casadocodigo.com.br/products/livro-programacao-paralela"><img src="Capa.webp" width="300" height="400"></a>
+
+<H3>Programação Paralela para Arquiteturas Híbridas — Com OpenMP, OpenACC e MPI</H3>
+
+O segundo volume amplia a trajetória iniciada no primeiro livro. Seu foco está na programação de arquiteturas paralelas modernas e heterogêneas, combinando processadores multicore, aceleradores e sistemas distribuídos.
+
+São abordados o modelo de tarefas do OpenMP, a transferência de processamento para aceleradores, recursos avançados do OpenACC, o uso de múltiplas GPUs e a construção de aplicações híbridas com MPI+OpenMP e MPI+OpenACC.
+
+<B>Indicado para:</B> leitores que já conhecem os fundamentos da programação paralela ou que desejam estudar tarefas, aceleradores e modelos híbridos com maior profundidade.
+
+<B>Principais temas:</B> arquiteturas paralelas, OpenMP Tasks, OpenMP Offloading, OpenACC avançado, múltiplas GPUs, MPI+OpenMP e MPI+OpenACC.
+
 </td>
 <td  width="50%"  align="center">
 <a href="https://www.casadocodigo.com.br/products/livro-paralela-arquiteturas-hibridas"><img src="Capa2.jpg" width="300" height="400"></a>
