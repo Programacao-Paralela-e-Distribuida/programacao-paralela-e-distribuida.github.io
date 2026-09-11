@@ -20,7 +20,6 @@ Os dois livros são acompanhados por programas em C, exercícios, estudos de cas
 <table align="center" width="80%" cellpadding="100" cellspacing="100">
 <tr>
 <td width="50%" align="left">
-
 <H3>Programação Paralela e Distribuída com MPI, OpenMP e OpenACC</H3>
 
 O primeiro volume constitui o ponto de entrada da coleção. Apresenta os conceitos fundamentais da programação paralela, as principais métricas de desempenho e três modelos amplamente utilizados na computação de alto desempenho: MPI, para sistemas de memória distribuída; OpenMP, para sistemas de memória compartilhada; e OpenACC, para aceleradores.
@@ -36,10 +35,12 @@ O primeiro volume constitui o ponto de entrada da coleção. Apresenta os concei
 </tr>
 </table>
 
+<BR>
+<BR>
+
 <table align="center" width="80%" cellpadding="100" cellspacing="100">
 <tr>
 <td width="50%" align="left">
-
 <H3>Programação Paralela para Arquiteturas Híbridas — Com OpenMP, OpenACC e MPI</H3>
 
 O segundo volume amplia a trajetória iniciada no primeiro livro. Seu foco está na programação de arquiteturas paralelas modernas e heterogêneas, combinando processadores multicore, aceleradores e sistemas distribuídos.
@@ -56,7 +57,6 @@ São abordados o modelo de tarefas do OpenMP, a transferência de processamento 
 </td>
 </tr>
 </table>
-
 
 
 ## Aquisição 
