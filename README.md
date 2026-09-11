@@ -181,8 +181,8 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <h2 id="recursos">Repositórios</h2>
 <ul>
 <li><p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida/MPI"> Repositório com códigos fonte em MPI para o Livro 1.</a></b></p></li>
-<li><p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida/OPEMMP"> Repositório com códigos fonte em OpenMP para os Livros 1 e 2.</a></b></p></li>
-<li><p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida/OpenACC"> Repositório com códigos fonte em OpenACC para os Livros 1 e 2.</a></b></p></li>
+<li><p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENMP"> Repositório com códigos fonte em OpenMP para os Livros 1 e 2.</a></b></p></li>
+<li><p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida/OPENACC"> Repositório com códigos fonte em OpenACC para os Livros 1 e 2.</a></b></p></li>
 <li><p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida/HIBRIDA"> Repositório com códigos fonte em MPI+X para o Livro 2.</a></b></p></li>
 <li><p><b><a href="https://github.com/Programacao-Paralela-e-Distribuida/SERIAL"> Repositório com códigos fonte sequenciais para os Livros 1 e 2.</a></b></p></li>
 </ul>
