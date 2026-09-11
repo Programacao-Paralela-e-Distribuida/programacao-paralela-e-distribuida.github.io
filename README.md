@@ -19,7 +19,7 @@ Os dois livros são acompanhados por programas em C, exercícios, estudos de cas
 
 <table align="center" width="80%" cellpadding="100" cellspacing="100">
 <tr>
-<td width="50%" align="center">
+<td width="50%" align="left">
 
 <H3>Programação Paralela e Distribuída com MPI, OpenMP e OpenACC</H3>
 
@@ -27,7 +27,7 @@ O primeiro volume constitui o ponto de entrada da coleção. Apresenta os concei
 
 <B>Indicado para:</B> estudantes de graduação, profissionais que estão iniciando seus estudos em programação paralela e disciplinas introdutórias de computação de alto desempenho.
 
-<B>Principais temas:</B fundamentos da programação paralela, balanceamento de carga, avaliação de desempenho, MPI, OpenMP, OpenACC e ambientes de execução.
+<B>Principais temas:</B> fundamentos da programação paralela, balanceamento de carga, avaliação de desempenho, MPI, OpenMP, OpenACC e ambientes de execução.
 
 </td>
 <td  width="50%"  align="center">
@@ -38,7 +38,7 @@ O primeiro volume constitui o ponto de entrada da coleção. Apresenta os concei
 
 <table align="center" width="80%" cellpadding="100" cellspacing="100">
 <tr>
-<td width="50%" align="center">
+<td width="50%" align="left">
 
 <H3>Programação Paralela para Arquiteturas Híbridas — Com OpenMP, OpenACC e MPI</H3>
 
