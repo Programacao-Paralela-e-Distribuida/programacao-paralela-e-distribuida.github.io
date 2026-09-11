@@ -209,7 +209,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <p> Colocamos disponíveis algumas ferramentas de visualização, disponíveis em português, espanhol e inglês, para auxiliar no entendimento do funcionamento da distribuição de dados e carga de trabalho entre processos/<em>threads</em> de uma aplicação MPI ou OpenMP.</p>
 
 <ul>
-<li>  Livro 1 - MPI, OpenMP e OpenACC</li>
+<li><b> Livro 1 - MPI, OpenMP e OpenACC</b></li>
 <ul>
 <li><a href="./interactive-tools/calcpi2.html">Cálculo de Pi com MPI</a></li>
 <li><a href="./interactive-tools/primos2.html">Cálculo de primos com MPI</a></li>
