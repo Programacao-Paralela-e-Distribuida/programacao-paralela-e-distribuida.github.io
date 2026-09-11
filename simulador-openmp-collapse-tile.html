@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenMP: collapse e tile na Multiplicação de Matrizes</title>
+  <style>
+    :root{--bg:#f1f5f9;--panel:#fff;--ink:#172033;--muted:#64748b;--line:#dbe3ee;--brand:#2563eb;--warn:#9a3412;--warnbg:#ffedd5;--ok:#166534;--okbg:#dcfce7;--shadow:0 12px 34px rgba(15,23,42,.08)}
+    *{box-sizing:border-box} body{margin:0;background:linear-gradient(135deg,#f8fafc,var(--bg));color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+    button,input,select{font:inherit} button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
+    .app{width:min(1180px,calc(100% - 28px));margin:24px auto} header{text-align:center;margin-bottom:18px} h1{margin:0 0 6px;font-size:clamp(1.5rem,4vw,2.2rem)} h2{margin:0;font-size:1.08rem} p{margin:0}.subtitle,.muted{color:var(--muted)}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px;margin-bottom:18px}
+    .mode-tabs{display:flex;gap:8px;margin-bottom:16px}.mode-tabs button{flex:1}.mode-tabs button.active{background:var(--brand);color:#fff}
+    button{min-height:40px;border:0;border-radius:9px;padding:9px 14px;cursor:pointer;font-weight:700;background:#e2e8f0;color:#334155}button.primary{background:var(--brand);color:#fff}button:disabled{opacity:.45;cursor:not-allowed}
+    .controls{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:13px;align-items:end}.conditional{display:contents}.hidden{display:none!important}
+    label{display:grid;gap:6px;color:#334155;font-size:.86rem;font-weight:650}input,select{width:100%;min-height:40px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;color:var(--ink);padding:7px 9px}
+    .actions{display:flex;gap:7px;grid-column:span 2}.actions button:first-child{flex:1}
+    .code{margin-top:16px;padding:13px 15px;border-radius:10px;background:#0f172a;color:#e2e8f0;font:600 .83rem ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}.pragma{color:#7dd3fc}.kw{color:#c4b5fd}
+    .status{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}.badge{border-radius:999px;padding:5px 10px;font-size:.77rem;font-weight:750}.safe{background:var(--okbg);color:var(--ok)}.risk{background:var(--warnbg);color:var(--warn)}.explain{color:var(--muted);font-size:.88rem;flex:1;min-width:220px}
+    .legend{display:flex;gap:10px 16px;flex-wrap:wrap;margin:10px 0 16px}.legend span{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:#475569}.swatch{width:13px;height:13px;border-radius:4px}
+    .workspace{display:grid;grid-template-columns:minmax(330px,1fr) minmax(250px,.58fr);gap:22px;align-items:start}.head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:10px}.head small{color:var(--muted)}
+    .matrix{display:grid;gap:5px}.cell{min-width:0;aspect-ratio:1.18;border:0;border-radius:7px;color:#fff;padding:3px;display:grid;place-items:center;position:relative;font-size:.72rem;font-weight:800;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25);transition:transform .15s,opacity .15s}.cell:hover,.cell.selected{transform:translateY(-2px);box-shadow:0 0 0 3px #0f172a}.cell.pending{opacity:.15}.cell small{font-size:.58rem;opacity:.9}.cell.race:after{content:"!";position:absolute;right:3px;top:2px;background:#fff;color:var(--warn);width:15px;height:15px;border-radius:50%;display:grid;place-items:center;font-weight:900}
+    .detail{border-left:1px solid var(--line);padding-left:20px}.detail-grid{display:grid;gap:7px;margin-top:12px}.krow{display:grid;grid-template-columns:30px 1fr 34px;gap:7px;align-items:center;font-size:.75rem}.bar{height:20px;border-radius:5px}.tuple{font:700 .77rem ui-monospace,monospace}.note{margin-top:14px;padding-top:13px;border-top:1px solid var(--line);color:#475569;font-size:.82rem;line-height:1.45}
+    .tile-key{display:inline-block;border:2px solid currentColor;border-radius:3px;width:13px;height:13px;background:transparent!important}
+    @media(max-width:820px){.controls{grid-template-columns:1fr 1fr}.workspace{grid-template-columns:1fr}.detail{border-left:0;border-top:1px solid var(--line);padding:16px 0 0}.actions{grid-column:span 2}}
+    @media(max-width:470px){.app{width:calc(100% - 16px);margin:8px auto}.panel{padding:14px;border-radius:12px}.controls{grid-template-columns:1fr}.conditional{display:contents}.actions{grid-column:auto;flex-wrap:wrap}.workspace{grid-template-columns:minmax(0,1fr)}}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header>
+    <h1>Multiplicação de matrizes com OpenMP</h1>
+    <p class="subtitle">Distribuição do trabalho de <code>A(M×N) × B(N×N) → C(M×N)</code></p>
+  </header>
+
+  <section class="panel" aria-label="Parâmetros">
+    <div class="mode-tabs" role="group" aria-label="Transformação estudada">
+      <button id="collapseMode" class="active" type="button">collapse</button>
+      <button id="tileMode" type="button">tile</button>
+    </div>
+    <div class="controls">
+      <label>Linhas de A e C (M)<input id="mInput" type="number" min="1" max="12" value="6"></label>
+      <label>Colunas de A, B e C (N)<input id="nInput" type="number" min="1" max="12" value="8"></label>
+      <label>Número de threads<input id="threadsInput" type="number" min="1" max="8" value="4"></label>
+      <div id="collapseControls" class="conditional">
+        <label>Nível de collapse
+          <select id="collapseInput"><option value="1">1 — laço i</option><option value="2" selected>2 — laços i,j</option><option value="3">3 — laços i,j,k</option></select>
+        </label>
+      </div>
+      <div id="tileControls" class="conditional hidden">
+        <label>Laços ladrilhados
+          <select id="tileDepthInput"><option value="1">1 — i</option><option value="2" selected>2 — i,j</option><option value="3">3 — i,j,k</option></select>
+        </label>
+        <label>Tile i<input id="tileIInput" type="number" min="1" max="6" value="2"></label>
+        <label id="tileJLabel">Tile j<input id="tileJInput" type="number" min="1" max="8" value="3"></label>
+        <label id="tileKLabel" class="hidden">Tile k<input id="tileKInput" type="number" min="1" max="8" value="2"></label>
+      </div>
+      <div class="actions">
+        <button id="playButton" class="primary" type="button">▶ Animar</button>
+        <button id="stepButton" type="button">Passo →</button>
+        <button id="resetButton" type="button">Reiniciar</button>
+      </div>
+    </div>
+    <div id="code" class="code"></div>
+  </section>
+
+  <section class="panel">
+    <div class="status"><span id="safetyBadge" class="badge safe">Sem corrida</span><p id="explanation" class="explain"></p></div>
+    <div id="legend" class="legend"></div>
+    <div class="workspace">
+      <div>
+        <div class="head"><h2>Matriz de resultado C</h2><small id="progress"></small></div>
+        <div id="matrix" class="matrix" aria-label="Matriz C colorida por thread"></div>
+      </div>
+      <aside class="detail">
+        <div class="head"><h2 id="detailTitle">C[0][0]</h2><small>laço interno k</small></div>
+        <p id="detailSummary" class="muted"></p>
+        <div id="kDetail" class="detail-grid"></div>
+      </aside>
+    </div>
+    <p id="note" class="note"></p>
+  </section>
+</main>
+
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const colors=["#2563eb","#dc2626","#059669","#d97706","#7c3aed","#db2777","#0891b2","#ea580c"];
+  const state={mode:"collapse",visible:Infinity,current:-1,timer:null,selected:[0,0],units:[],owners:[]};
+  const inputs={m:$("mInput"),n:$("nInput"),threads:$("threadsInput"),collapse:$("collapseInput"),depth:$("tileDepthInput"),ti:$("tileIInput"),tj:$("tileJInput"),tk:$("tileKInput")};
+  const int=(el,min,max,fallback)=>{const x=parseInt(el.value,10);const v=Number.isFinite(x)?Math.max(min,Math.min(max,x)):fallback;el.value=v;return v};
+  function params(){
+    const m=int(inputs.m,1,12,6),n=int(inputs.n,1,12,8),threads=int(inputs.threads,1,8,4);
+    inputs.ti.max=m;inputs.tj.max=n;inputs.tk.max=n;
+    const ti=int(inputs.ti,1,m,2),tj=int(inputs.tj,1,n,3),tk=int(inputs.tk,1,n,2);
+    return{m,n,threads,collapse:+inputs.collapse.value,depth:+inputs.depth.value,ti,tj,tk};
+  }
+  function staticOwners(count,threads){const a=Array(count),base=Math.floor(count/threads),rem=count%threads;let q=0;for(let t=0;t<threads;t++)for(let x=0;x<base+(t<rem?1:0);x++)a[q++]=t;return a}
+  function build(p){
+    const units=[];
+    if(state.mode==="collapse"){
+      if(p.collapse===1)for(let i=0;i<p.m;i++)units.push({points:Array.from({length:p.n*p.n},(_,q)=>[i,Math.floor(q/p.n),q%p.n]),label:`i=${i}`});
+      if(p.collapse===2)for(let i=0;i<p.m;i++)for(let j=0;j<p.n;j++)units.push({points:Array.from({length:p.n},(_,k)=>[i,j,k]),label:`(${i},${j})`});
+      if(p.collapse===3)for(let i=0;i<p.m;i++)for(let j=0;j<p.n;j++)for(let k=0;k<p.n;k++)units.push({points:[[i,j,k]],label:`(${i},${j},${k})`});
+    }else{
+      const di=p.depth>=1?p.ti:p.m,dj=p.depth>=2?p.tj:p.n,dk=p.depth>=3?p.tk:p.n;
+      for(let ii=0;ii<p.m;ii+=di)for(let jj=0;jj<p.n;jj+=dj)for(let kk=0;kk<p.n;kk+=dk){
+        const points=[];for(let i=ii;i<Math.min(ii+di,p.m);i++)for(let j=jj;j<Math.min(jj+dj,p.n);j++)for(let k=kk;k<Math.min(kk+dk,p.n);k++)points.push([i,j,k]);
+        units.push({points,label:`[${ii}:${Math.min(ii+di,p.m)})×[${jj}:${Math.min(jj+dj,p.n)})${p.depth===3?`×[${kk}:${Math.min(kk+dk,p.n)})`:""}`});
+      }
+    }
+    const unitOwner=staticOwners(units.length,p.threads);
+    const owners=Array.from({length:p.m},()=>Array.from({length:p.n},()=>Array(p.n).fill(-1)));
+    units.forEach((u,x)=>u.points.forEach(([i,j,k])=>owners[i][j][k]=unitOwner[x]));
+    state.units=units;state.owners=owners;
+  }
+  function colorFor(list){const unique=[...new Set(list)];if(unique.length===1)return colors[unique[0]%colors.length];const slices=unique.map((t,x)=>`${colors[t%colors.length]} ${x/unique.length*100}% ${(x+1)/unique.length*100}%`);return`conic-gradient(${slices.join(",")})`}
+  function unitComplete(i,j,limit){let last=-1;for(let u=0;u<state.units.length;u++)if(state.units[u].points.some(p=>p[0]===i&&p[1]===j))last=u;return last<limit}
+  function render(reset=true){
+    stop();const p=params();build(p);if(reset){state.visible=state.units.length;state.current=-1;state.selected=[Math.min(state.selected[0],p.m-1),Math.min(state.selected[1],p.n-1)]}
+    $("collapseMode").classList.toggle("active",state.mode==="collapse");$("tileMode").classList.toggle("active",state.mode==="tile");
+    $("collapseControls").classList.toggle("hidden",state.mode!=="collapse");$("tileControls").classList.toggle("hidden",state.mode!=="tile");
+    $("tileJLabel").classList.toggle("hidden",p.depth<2);$("tileKLabel").classList.toggle("hidden",p.depth<3);
+    const risky=(state.mode==="collapse"&&p.collapse===3)||(state.mode==="tile"&&p.depth===3);
+    $("safetyBadge").className=`badge ${risky?"risk":"safe"}`;$("safetyBadge").textContent=risky?"Possível corrida":"Sem corrida entre threads";
+    $("explanation").textContent=risky?"Partes diferentes da soma de um mesmo C[i][j] podem ser executadas por threads diferentes. O código naive com += precisa de redução ou acumulação segura.":state.mode==="collapse"?`As unidades do espaço colapsado são distribuídas estaticamente entre ${p.threads} threads.`:"Os blocos externos gerados por tile são distribuídos estaticamente entre as threads nesta simulação.";
+    $("code").innerHTML=codeText(p);
+    $("legend").innerHTML=Array.from({length:p.threads},(_,t)=>`<span><i class="swatch" style="background:${colors[t%colors.length]}"></i>Thread ${t}</span>`).join("")+(state.mode==="tile"?'<span><i class="tile-key"></i>limite lógico do tile</span>':"");
+    $("matrix").style.gridTemplateColumns=`repeat(${p.n},minmax(28px,1fr))`;
+    $("matrix").replaceChildren(...Array.from({length:p.m*p.n},(_,q)=>{const i=Math.floor(q/p.n),j=q%p.n,list=state.owners[i][j],unique=[...new Set(list)],done=unitComplete(i,j,state.visible);const b=document.createElement("button");b.type="button";b.className=`cell${done?"":" pending"}${unique.length>1?" race":""}${state.selected[0]===i&&state.selected[1]===j?" selected":""}`;b.style.background=colorFor(list);b.innerHTML=`<span>C<small>[${i},${j}]</small></span>`;b.setAttribute("aria-label",`C linha ${i}, coluna ${j}, threads ${unique.join(", ")}`);b.onclick=()=>{state.selected=[i,j];draw(p)};return b}));
+    $("progress").textContent=`${Math.min(state.visible,state.units.length)} de ${state.units.length} unidades`;
+    drawDetail(p);$("note").textContent=noteText(p,risky);
+  }
+  function draw(p){renderMatrixOnly(p);drawDetail(p)}
+  function renderMatrixOnly(p){[...$("matrix").children].forEach((b,q)=>{const i=Math.floor(q/p.n),j=q%p.n;b.classList.toggle("selected",state.selected[0]===i&&state.selected[1]===j)})}
+  function drawDetail(p){const[i,j]=state.selected,list=state.owners[i][j],unique=[...new Set(list)];$("detailTitle").textContent=`C[${i}][${j}]`;$("detailSummary").textContent=unique.length===1?`Todas as ${p.n} multiplicações pertencem à thread ${unique[0]}.`:`As ${p.n} multiplicações foram divididas entre ${unique.length} threads.`;
+    $("kDetail").innerHTML=list.map((t,k)=>`<div class="krow"><span class="tuple">k=${k}</span><span class="bar" style="background:${colors[t%colors.length]}"></span><span>T${t}</span></div>`).join("")}
+  function codeText(p){if(state.mode==="collapse")return`<span class="pragma">#pragma omp parallel for collapse(${p.collapse})</span>\n<span class="kw">for</span> (int i=0; i&lt;M; i++)\n  <span class="kw">for</span> (int j=0; j&lt;N; j++)\n    <span class="kw">for</span> (int k=0; k&lt;N; k++) C[i][j] += A[i][k]*B[k][j];`;
+    const sizes=[p.ti,p.tj,p.tk].slice(0,p.depth).join(",");return`<span class="pragma">#pragma omp tile sizes(${sizes})</span>\n<span class="kw">for</span> (int i=0; i&lt;M; i++)\n  <span class="kw">for</span> (int j=0; j&lt;N; j++)\n    <span class="kw">for</span> (int k=0; k&lt;N; k++) C[i][j] += A[i][k]*B[k][j];\n\n// Hipótese didática: laços de blocos gerados → distribuição static`;
+  }
+  function noteText(p,risky){if(state.mode==="collapse")return`collapse(${p.collapse}) associa os ${p.collapse} laços externos à construção omp for. ${risky?"Ao incluir k, a atualização naive de C deixa de ser independente.":"Cada elemento C[i][j] permanece sob responsabilidade de uma única thread."}`;return`tile transforma os ${p.depth} laços externos em ${2*p.depth} laços: ${p.depth} laço(s) de blocos e ${p.depth} laço(s) dentro dos blocos. Tile organiza a ordem/localidade; a distribuição entre threads mostrada é uma hipótese static aplicada aos blocos gerados.${risky?" Ladrilhar e distribuir k separa a soma de C[i][j] e exige sincronização.":""}`}
+  function stop(){if(state.timer!==null)clearInterval(state.timer);state.timer=null;$("playButton").textContent="▶ Animar"}
+  function animate(){stop();state.visible=0;state.current=-1;render(false);$("playButton").textContent="■ Parar";state.timer=setInterval(()=>{state.visible++;state.current=state.visible-1;drawProgress();if(state.visible>=state.units.length){stop();state.current=-1}},Math.max(65,Math.min(260,3200/state.units.length)))}
+  function drawProgress(){const p=params();[...$("matrix").children].forEach((b,q)=>{const i=Math.floor(q/p.n),j=q%p.n;b.classList.toggle("pending",!unitComplete(i,j,state.visible))});$("progress").textContent=`${state.visible} de ${state.units.length} unidades`}
+  function step(){stop();if(state.visible>=state.units.length)state.visible=0;state.visible++;drawProgress()}
+  $("collapseMode").onclick=()=>{state.mode="collapse";render(true)};$("tileMode").onclick=()=>{state.mode="tile";render(true)};
+  Object.values(inputs).forEach(el=>el.addEventListener("change",()=>render(true)));
+  $("playButton").onclick=()=>state.timer===null?animate():stop();$("stepButton").onclick=step;$("resetButton").onclick=()=>render(true);
+  render(true);
+})();
+</script>
+</body>
+</html>
