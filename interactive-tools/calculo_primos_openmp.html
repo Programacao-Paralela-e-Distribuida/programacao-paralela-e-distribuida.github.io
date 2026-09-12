@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contagem de Primos com OpenMP</title>
+  <style>
+    :root { color-scheme: light; --ink:#17243a; --muted:#52627a; --line:#d6dfeb; --blue:#245bd9; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#f2f5fa; color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    main { max-width:1200px; margin:24px auto; padding:0 20px 40px; }
+    h1 { margin:8px 0; font-size:clamp(1.8rem,4vw,2.6rem); letter-spacing:-.035em; }
+    h2 { margin:0 0 12px; font-size:1.2rem; } p { margin:8px 0; }
+    .muted, small { color:var(--muted); } small { font-size:.82rem; }
+    .language-switch { display:flex; justify-content:flex-end; gap:7px; flex-wrap:wrap; }
+    button, input, select { font:inherit; }
+    button { padding:9px 14px; border:1px solid var(--line); border-radius:9px; background:white; color:var(--ink); cursor:pointer; font-weight:650; }
+    button:hover { border-color:var(--blue); } button.active, button.primary { background:var(--blue); color:white; border-color:var(--blue); }
+    button:disabled { opacity:.5; cursor:default; }
+    :focus-visible { outline:3px solid #85afff; outline-offset:3px; }
+    input, select { width:100%; min-width:0; padding:10px; background:white; color:var(--ink); border:1px solid #aebcd0; border-radius:8px; }
+    input[aria-invalid="true"] { border-color:#b42332; }
+    input[type="range"] { padding:0; accent-color:var(--blue); }
+    label { display:block; font-size:.9rem; font-weight:650; margin-bottom:6px; }
+    .panel { padding:22px; margin-top:18px; background:white; border:1px solid var(--line); border-radius:15px; box-shadow:0 5px 18px #17345406; }
+    .controls { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; }
+    .hint { margin-top:16px; border-left:4px solid var(--blue); background:#edf3ff; padding:12px 16px; border-radius:8px; }
+    .actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; align-items:center; }
+    .actions code { margin-left:auto; overflow-wrap:anywhere; }
+    code, pre, .mono { font-family:ui-monospace,Consolas,monospace; }
+    code { background:#eef2f8; padding:3px 6px; border-radius:5px; font-size:.9rem; }
+    #error { color:#a31d30; font-weight:600; }
+    [hidden] { display:none !important; }
+    .summary { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:18px 0; }
+    .stat { background:white; border:1px solid var(--line); border-radius:12px; padding:15px; }
+    .stat span { display:block; color:var(--muted); font-size:.86rem; }
+    .stat strong { display:block; font-size:1.5rem; margin-top:4px; }
+    .progress { display:flex; gap:12px; align-items:center; }
+    .progress label { white-space:nowrap; margin:0; } .progress output { white-space:nowrap; min-width:80px; text-align:right; }
+    .legend { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:16px; font-size:.85rem; color:var(--muted); }
+    .legend span { display:inline-flex; gap:6px; align-items:center; }
+    .dot { width:12px; height:12px; display:inline-block; border-radius:3px; background:#eff3f8; border:1px solid #c9d5e2; }
+    .dot.prime { background:#d2f2df; border-color:#29925a; } .dot.composite { background:#dce3ed; }
+    .dot.running { background:#fff0bc; border-color:#b58600; }
+    .numbers { display:grid; grid-template-columns:repeat(auto-fill,minmax(58px,1fr)); gap:7px; max-height:480px; overflow:auto; padding:4px; }
+    .number { border:1px solid var(--line); border-bottom:4px solid var(--thread-color,#d6dfeb); padding:6px; border-radius:8px; text-align:center; background:#f5f7fb; }
+    .number strong { font-size:1.05rem; } .number small { display:block; font-size:.7rem; }
+    .number.prime { background:#d2f2df; color:#145c32; } .number.composite { background:#e4e9f0; }
+    .number.running { background:#fff0bc; outline:2px solid #c89511; outline-offset:0; }
+    .table-scroll { overflow:auto; } table { width:100%; border-collapse:collapse; font-size:.9rem; }
+    th,td { text-align:left; padding:10px; border-bottom:1px solid var(--line); vertical-align:top; }
+    th { background:#f3f6fa; font-weight:650; } td:first-child { white-space:nowrap; }
+    .thread-mark { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; }
+    .chips { display:flex; flex-wrap:wrap; gap:4px; min-width:150px; max-width:440px; }
+    .chip { padding:2px 5px; background:#eef2f8; border-radius:4px; border-left:3px solid var(--thread-color); font-size:.75rem; }
+    .chip.done { background:#d2f2df; }
+    .timeline-row { display:grid; grid-template-columns:88px minmax(0,1fr) 65px; align-items:center; gap:10px; margin:10px 0; font-size:.85rem; }
+    .track { height:28px; background:#eef2f8; border-radius:6px; position:relative; overflow:hidden; }
+    .segment { position:absolute; height:100%; border-right:2px solid white; opacity:.35; min-width:2px; }
+    .segment.done { opacity:.95; } .segment.running { opacity:.7; }
+    .cursor { position:absolute; height:100%; width:2px; background:#18263c; z-index:2; }
+    .result { margin-top:16px; background:#eaf6ee; border:1px solid #a8d5b7; padding:14px; border-radius:9px; }
+    .result strong { font-size:1.35rem; }
+    #chunkLog { max-height:300px; overflow:auto; }
+    pre { white-space:pre; overflow:auto; padding:18px; border-radius:10px; background:#19263b; color:#e3ecfb; font-size:.86rem; }
+    a { color:#2056bf; } footer { margin-top:20px; color:var(--muted); font-size:.85rem; }
+    @media(max-width:760px) { .controls,.summary { grid-template-columns:repeat(2,minmax(0,1fr)); } .panel { padding:16px; } }
+    @media(max-width:440px) { main { padding:0 10px 30px; } .controls { grid-template-columns:1fr; } .actions code { width:100%; margin:0; } .timeline-row { grid-template-columns:66px minmax(0,1fr) 48px; gap:5px; } .progress { flex-wrap:wrap; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="language-switch" role="group" data-aria="language" aria-label="Idioma">
+      <button type="button" data-lang="pt" lang="pt-BR" aria-pressed="true" class="active">🇧🇷 Português</button>
+      <button type="button" data-lang="es" lang="es" aria-pressed="false">🇪🇸 Español</button>
+      <button type="button" data-lang="en" lang="en" aria-pressed="false">🇺🇸 English</button>
+    </div>
+    <h1 data-text="title">Contagem de Primos com OpenMP</h1>
+    <p class="muted" data-text="subtitle"></p>
+  </header>
+  <section class="panel">
+    <form id="settings" class="controls" novalidate>
+      <div><label for="threads" data-text="threads"></label><input id="threads" type="number" min="1" max="8" step="1" value="4"></div>
+      <div><label for="maxN" data-text="maxN"></label><input id="maxN" type="number" min="3" max="1001" step="1" value="101"></div>
+      <div><label for="schedule" data-text="schedule"></label><select id="schedule"><option value="static">static</option><option value="dynamic">dynamic</option><option value="guided">guided</option></select></div>
+      <div><label for="chunkSize" data-text="chunkSize"></label><input id="chunkSize" type="number" min="1" max="1001" step="1" placeholder="Padrão" aria-describedby="scheduleHint"><small data-text="chunkUnit"></small></div>
+    </form>
+    <p id="error" role="alert" hidden></p>
+    <div class="hint" id="scheduleHint"></div>
+    <div class="actions">
+      <button id="play" class="primary" type="button"></button>
+      <button id="step" type="button" data-text="step"></button>
+      <button id="finish" type="button" data-text="finish"></button>
+      <button id="reset" type="button" data-text="reset"></button>
+      <code id="scheduleCode"></code>
+    </div>
+  </section>
+  <div id="workspace">
+    <div class="summary">
+      <div class="stat"><span data-text="completed"></span><strong id="completed"></strong></div>
+      <div class="stat"><span data-text="partial"></span><strong id="partial"></strong></div>
+      <div class="stat"><span data-text="claimedChunks"></span><strong id="claimedChunks"></strong></div>
+      <div class="stat"><span data-text="time"></span><strong id="time"></strong></div>
+    </div>
+    <section class="panel">
+      <div class="progress"><label for="progress" data-text="progress"></label><input id="progress" type="range" min="0" value="0" step="1"><output id="progressValue" for="progress"></output></div>
+      <h2 style="margin-top:20px" data-text="gridTitle"></h2>
+      <div class="legend">
+        <span><i class="dot prime"></i><span data-text="prime"></span></span>
+        <span><i class="dot composite"></i><span data-text="composite"></span></span>
+        <span><i class="dot running"></i><span data-text="running"></span></span>
+        <span><i class="dot"></i><span data-text="waiting"></span></span>
+      </div>
+      <div id="numbers" class="numbers"></div>
+      <div id="result" class="result" hidden></div>
+    </section>
+    <section class="panel">
+      <h2 data-text="threadTitle"></h2>
+      <p class="muted" data-text="assignmentNote"></p>
+      <div class="table-scroll"><table>
+        <thead><tr><th>Thread</th><th data-text="assigned"></th><th data-text="completedShort"></th><th data-text="localPrimes"></th><th data-text="status"></th></tr></thead>
+        <tbody id="threadRows"></tbody>
+      </table></div>
+      <h2 style="margin-top:20px" data-text="timelineTitle"></h2>
+      <div id="timeline"></div>
+      <p class="muted" data-text="costNote"></p>
+    </section>
+    <section class="panel">
+      <h2 data-text="logTitle"></h2>
+      <p class="muted" data-text="logNote"></p>
+      <div id="chunkLog"><table>
+        <thead><tr><th>#</th><th>Thread</th><th data-text="range"></th><th data-text="iterations"></th><th data-text="dispatch"></th><th data-text="startEnd"></th></tr></thead>
+        <tbody id="chunkRows"></tbody>
+      </table></div>
+    </section>
+  </div>
+  <section class="panel" id="codePanel">
+    <h2 data-text="codeTitle"></h2>
+    <p data-text="reductionNote"></p>
+    <pre id="code"></pre>
+  </section>
+  <footer><p data-text="modelNote"></p><a href="https://www.openmp.org/spec-html/5.1/openmpsu48.html" target="_blank" rel="noreferrer" data-text="source"></a></footer>
+</main>
+<script>
+'use strict';
+const translations = {
+  pt: {
+    language:'Idioma', title:'Contagem de Primos com OpenMP', subtitle:'Compare static, dynamic e guided ao distribuir os testes dos números ímpares de 3 até N entre threads.',
+    threads:'Número de threads (1–8)', maxN:'Valor máximo N (3–1001)', schedule:'Escalonamento', chunkSize:'Chunk size (opcional)', default:'Padrão', chunkUnit:'Quantidade de iterações, não de bytes.',
+    staticDefault:'static sem chunk: um bloco contíguo por thread, com divisão igualitária dos ímpares. Nesta simulação, as primeiras threads recebem uma iteração extra quando há resto; a diferença é de no máximo uma iteração.',
+    staticChunk:'static com chunk = {0}: blocos de {0} iterações são atribuídos alternadamente às threads 0, 1, …, P−1. O último bloco pode ser menor.',
+    dynamicHint:'dynamic com chunk = {0}: a próxima thread livre recebe um bloco de até {0} iterações. Sem chunk informado, o padrão é 1 iteração.',
+    guidedHint:'guided com mínimo = {0}: a próxima thread livre recebe max({0}, ceil(restantes / threads)) iterações, limitado ao que resta. Os blocos diminuem; o último pode ser menor que o mínimo. Sem chunk informado, o mínimo é 1.',
+    start:'▶ Iniciar', pause:'⏸ Pausar', restart:'▶ Repetir', step:'Próximo evento', finish:'Ir ao final', reset:'Reiniciar',
+    completed:'Iterações concluídas', partial:'Primos ímpares encontrados', claimedChunks:'Blocos atribuídos', time:'Tempo simulado (u.t.)', progress:'Percorrer o tempo',
+    gridTitle:'Números avaliados: 3 até N', prime:'Primo', composite:'Composto', running:'Em execução', waiting:'Aguardando', unassigned:'Sem thread',
+    threadTitle:'Distribuição de trabalho por thread', assignmentNote:'A borda colorida identifica a thread. No static, a atribuição é definida antes da execução. No dynamic e guided, os blocos aparecem quando são solicitados.',
+    assigned:'Números atribuídos', completedShort:'Concluídas', localPrimes:'Primos locais', status:'Estado', done:'Concluído', barrier:'Na barreira',
+    timelineTitle:'Execução dos blocos por thread', costNote:'Cada teste custa 1 unidade de tempo mais 1 por divisor ímpar testado, com parada ao encontrar um divisor. Não há custo de escalonamento neste modelo. Os comprimentos representam esse trabalho simulado, não tempo medido.',
+    logTitle:'Atribuição de blocos', logNote:'A tabela registra cada atribuição. Os intervalos contêm apenas ímpares (passo 2); início e fim usam unidades de tempo simuladas.',
+    range:'Intervalo de ímpares', iterations:'Iterações', dispatch:'Atribuição (t)', startEnd:'Início → fim', empty:'Nenhum bloco atribuído ainda.',
+    codeTitle:'Código C equivalente', reductionNote:'Cada thread acumula uma contagem privada. Ao final do laço, reduction(+:count) soma as contagens à contagem inicial de 1, que representa o primo 2.',
+    modelNote:'Modelo didático e determinístico: empates favorecem a thread de menor índice. A partição static sem chunk e a regra de redução dos blocos guided são escolhas válidas para ilustrar a política; o runtime pode usar outras divisões e ordens. Este arquivo funciona offline.',
+    source:'Referência: cláusula schedule do OpenMP', invalid:'Use valores inteiros: 1–8 threads, N entre 3 e 1001 e chunk vazio ou entre 1 e 1001.',
+    total:'Total de primos até {0}: {1}', sum:'Redução: {0} + 1 (primo 2) = {1}.', chunkTitle:'Bloco {0}: {1}–{2}, t = {3} → {4}', unit:'u.t.'
+  },
+  en: {
+    language:'Language', title:'Prime Counting with OpenMP', subtitle:'Compare static, dynamic and guided when distributing tests of odd numbers from 3 through N among threads.',
+    threads:'Number of threads (1–8)', maxN:'Maximum N (3–1001)', schedule:'Schedule', chunkSize:'Chunk size (optional)', default:'Default', chunkUnit:'Number of iterations, not bytes.',
+    staticDefault:'static without a chunk: one contiguous block per thread, with an even division of odd numbers. This simulation gives the first threads one extra iteration when there is a remainder; counts differ by at most one iteration.',
+    staticChunk:'static with chunk = {0}: blocks of {0} iterations are assigned round-robin to threads 0, 1, …, P−1. The last block may be smaller.',
+    dynamicHint:'dynamic with chunk = {0}: the next available thread receives up to {0} iterations. Without an explicit chunk, the default is 1 iteration.',
+    guidedHint:'guided with minimum = {0}: the next available thread receives max({0}, ceil(remaining / threads)) iterations, capped at the remaining count. Blocks shrink; the last may be smaller than the minimum. Without an explicit chunk, the minimum is 1.',
+    start:'▶ Start', pause:'⏸ Pause', restart:'▶ Replay', step:'Next event', finish:'Go to end', reset:'Reset',
+    completed:'Completed iterations', partial:'Odd primes found', claimedChunks:'Assigned chunks', time:'Simulated time (t.u.)', progress:'Explore time',
+    gridTitle:'Numbers tested: 3 through N', prime:'Prime', composite:'Composite', running:'Running', waiting:'Waiting', unassigned:'Unassigned',
+    threadTitle:'Work distribution by thread', assignmentNote:'The colored border identifies the thread. With static, assignments are fixed before execution. With dynamic and guided, chunks appear when requested.',
+    assigned:'Assigned numbers', completedShort:'Completed', localPrimes:'Local primes', status:'Status', done:'Complete', barrier:'At the barrier',
+    timelineTitle:'Chunk execution by thread', costNote:'Each test costs 1 time unit plus 1 per odd divisor tested, stopping when a divisor is found. Scheduling overhead is omitted. Lengths represent this simulated work, not measured time.',
+    logTitle:'Chunk assignments', logNote:'The table records each assignment. Ranges contain only odd numbers (stride 2); start and end use simulated time units.',
+    range:'Odd-number range', iterations:'Iterations', dispatch:'Assignment (t)', startEnd:'Start → end', empty:'No chunks assigned yet.',
+    codeTitle:'Equivalent C code', reductionNote:'Each thread accumulates a private count. At the end of the loop, reduction(+:count) adds these counts to the initial count of 1, which represents the prime number 2.',
+    modelNote:'Deterministic teaching model: ties favor the lowest thread index. The static partition without a chunk and the guided shrinking rule are valid choices to illustrate the policies; a runtime may use other divisions and orders. This file works offline.',
+    source:'Reference: OpenMP schedule clause', invalid:'Use integers: 1–8 threads, N from 3 to 1001, and a blank chunk or a chunk from 1 to 1001.',
+    total:'Total primes through {0}: {1}', sum:'Reduction: {0} + 1 (prime 2) = {1}.', chunkTitle:'Chunk {0}: {1}–{2}, t = {3} → {4}', unit:'t.u.'
+  },
+  es: {
+    language:'Idioma', title:'Conteo de primos con OpenMP', subtitle:'Compara static, dynamic y guided al distribuir las pruebas de números impares de 3 a N entre hilos.',
+    threads:'Número de hilos (1–8)', maxN:'Valor máximo N (3–1001)', schedule:'Planificación', chunkSize:'Chunk size (opcional)', default:'Predeterminado', chunkUnit:'Cantidad de iteraciones, no de bytes.',
+    staticDefault:'static sin chunk: un bloque contiguo por hilo, con una división equitativa de los impares. En esta simulación, los primeros hilos reciben una iteración adicional cuando hay resto; la diferencia es como máximo una iteración.',
+    staticChunk:'static con chunk = {0}: los bloques de {0} iteraciones se asignan de forma cíclica a los hilos 0, 1, …, P−1. El último bloque puede ser menor.',
+    dynamicHint:'dynamic con chunk = {0}: el siguiente hilo libre recibe hasta {0} iteraciones. Sin chunk explícito, el valor predeterminado es 1 iteración.',
+    guidedHint:'guided con mínimo = {0}: el siguiente hilo libre recibe max({0}, ceil(restantes / hilos)) iteraciones, limitado a las que quedan. Los bloques disminuyen; el último puede ser menor que el mínimo. Sin chunk explícito, el mínimo es 1.',
+    start:'▶ Iniciar', pause:'⏸ Pausar', restart:'▶ Repetir', step:'Siguiente evento', finish:'Ir al final', reset:'Reiniciar',
+    completed:'Iteraciones completadas', partial:'Primos impares encontrados', claimedChunks:'Bloques asignados', time:'Tiempo simulado (u.t.)', progress:'Recorrer el tiempo',
+    gridTitle:'Números evaluados: de 3 a N', prime:'Primo', composite:'Compuesto', running:'En ejecución', waiting:'Esperando', unassigned:'Sin hilo',
+    threadTitle:'Distribución del trabajo por hilo', assignmentNote:'El borde de color identifica el hilo. En static, la asignación se fija antes de la ejecución. En dynamic y guided, los bloques aparecen cuando se solicitan.',
+    assigned:'Números asignados', completedShort:'Completadas', localPrimes:'Primos locales', status:'Estado', done:'Completado', barrier:'En la barrera',
+    timelineTitle:'Ejecución de bloques por hilo', costNote:'Cada prueba cuesta 1 unidad de tiempo más 1 por divisor impar probado, y se detiene al encontrar un divisor. El modelo omite el coste de planificación. Las longitudes representan este trabajo simulado, no tiempo medido.',
+    logTitle:'Asignación de bloques', logNote:'La tabla registra cada asignación. Los intervalos contienen solo impares (paso 2); inicio y fin usan unidades de tiempo simuladas.',
+    range:'Intervalo de impares', iterations:'Iteraciones', dispatch:'Asignación (t)', startEnd:'Inicio → fin', empty:'Todavía no se han asignado bloques.',
+    codeTitle:'Código C equivalente', reductionNote:'Cada hilo acumula un conteo privado. Al final del bucle, reduction(+:count) suma los conteos al valor inicial de 1, que representa el número primo 2.',
+    modelNote:'Modelo didáctico y determinista: los empates favorecen al hilo de menor índice. La partición static sin chunk y la regla de reducción de bloques guided son opciones válidas para ilustrar las políticas; el runtime puede usar otras divisiones y órdenes. Este archivo funciona sin conexión.',
+    source:'Referencia: cláusula schedule de OpenMP', invalid:'Usa enteros: 1–8 hilos, N entre 3 y 1001, y chunk vacío o entre 1 y 1001.',
+    total:'Total de primos hasta {0}: {1}', sum:'Reducción: {0} + 1 (primo 2) = {1}.', chunkTitle:'Bloque {0}: {1}–{2}, t = {3} → {4}', unit:'u.t.'
+  }
+};
+
+const colors = ['#2563eb','#dc3848','#00875e','#b77700','#8651cb','#c33489','#00859c','#c66027'];
+const $ = id => document.getElementById(id);
+let lang = 'pt';
+const t = (key, ...values) => translations[lang][key].replace(/\{(\d+)\}/g, (_, i) => values[Number(i)]);
+
+// A deterministic work model: one base unit plus one per trial division.
+function primeWork(number) {
+  let cost = 1;
+  if (number < 2) return {prime:false, cost};
+  if (number === 2) return {prime:true, cost};
+  if (number % 2 === 0) return {prime:false, cost};
+  for (let divisor = 3; divisor * divisor <= number; divisor += 2) {
+    cost++;
+    if (number % divisor === 0) return {prime:false, cost};
+  }
+  return {prime:true, cost};
+}
+
+// Precompute a possible execution; the UI reveals demand-driven assignments only at dispatch time.
+function buildSchedule({threads, maxN, schedule, chunkSize}) {
+  if (!Number.isInteger(threads) || threads < 1 || threads > 8 || !Number.isInteger(maxN) || maxN < 3 || maxN > 1001 ||
+      !['static','dynamic','guided'].includes(schedule) || (chunkSize !== null && (!Number.isInteger(chunkSize) || chunkSize < 1 || chunkSize > 1001))) {
+    throw new RangeError('Invalid schedule configuration');
+  }
+  const numbers = Array.from({length:Math.floor((maxN - 1) / 2)}, (_, i) => 3 + 2 * i);
+  const available = Array(threads).fill(0);
+  const chunks = [], tasks = [];
+  function assign(thread, first, count) {
+    const start = available[thread];
+    const chunk = {id:chunks.length + 1, thread, first, count, start, dispatch:schedule === 'static' ? 0 : start};
+    for (let index = first; index < first + count; index++) {
+      const work = primeWork(numbers[index]);
+      const task = {index, number:numbers[index], thread, chunk:chunk.id, start:available[thread], end:available[thread] + work.cost, ...work};
+      tasks.push(task);
+      available[thread] = task.end;
+    }
+    chunk.end = available[thread];
+    chunks.push(chunk);
+  }
+  if (schedule === 'static' && chunkSize === null) {
+    const base = Math.floor(numbers.length / threads), remainder = numbers.length % threads;
+    let first = 0;
+    for (let thread = 0; thread < threads; thread++) {
+      const count = base + (thread < remainder ? 1 : 0);
+      if (count > 0) assign(thread, first, count);
+      first += count;
+    }
+  } else {
+    let first = 0, block = 0;
+    while (first < numbers.length) {
+      const remaining = numbers.length - first;
+      const size = schedule === 'guided' ? Math.max(chunkSize ?? 1, Math.ceil(remaining / threads)) : (chunkSize ?? 1);
+      // Ties use the lower thread id; a real runtime can choose differently.
+      const thread = schedule === 'static' ? block % threads : available.indexOf(Math.min(...available));
+      const count = Math.min(size, remaining);
+      assign(thread, first, count);
+      first += count;
+      block++;
+    }
+  }
+  tasks.sort((a,b) => a.index - b.index);
+  const end = Math.max(...available);
+  const events = [...new Set([0, ...tasks.flatMap(task => [task.start, task.end])])].sort((a,b) => a-b);
+  return {numbers, tasks, chunks, available, events, end};
+}
+
+let config, plan, elapsed = 0, started = false, timer = null, valid = true;
+function stop() { clearInterval(timer); timer = null; }
+function scheduleClause() { return `schedule(${config.schedule}${config.chunkSize === null ? '' : ', ' + config.chunkSize})`; }
+function readSettings() {
+  const fields = ['threads','maxN','chunkSize'];
+  fields.forEach(id => $(id).setAttribute('aria-invalid', String(!$(id).validity.valid || (id !== 'chunkSize' && $(id).value === ''))));
+  if (fields.some(id => $(id).getAttribute('aria-invalid') === 'true')) return null;
+  return {threads:Number($('threads').value), maxN:Number($('maxN').value), schedule:$('schedule').value,
+    chunkSize:$('chunkSize').value === '' ? null : Number($('chunkSize').value)};
+}
+function rebuild() {
+  stop();
+  config = readSettings();
+  valid = config !== null;
+  if (valid) {
+    plan = buildSchedule(config);
+    elapsed = 0;
+    started = false;
+  }
+  render();
+}
+function isClaimed(chunk) { return config.schedule === 'static' || (started && chunk.dispatch <= elapsed); }
+function statusOf(task) {
+  if (!started) return 'waiting';
+  if (task.end <= elapsed) return task.prime ? 'prime' : 'composite';
+  if (task.start <= elapsed) return 'running';
+  return 'waiting';
+}
+function render() {
+  $('error').hidden = valid;
+  $('error').textContent = valid ? '' : t('invalid');
+  $('workspace').hidden = $('codePanel').hidden = !valid;
+  ['play','step','finish','reset'].forEach(id => { $(id).disabled = !valid; });
+  $('play').textContent = timer ? t('pause') : valid && started && elapsed === plan.end ? t('restart') : t('start');
+  if (!valid) { $('scheduleHint').textContent = ''; $('scheduleCode').textContent = ''; return; }
+  const policy = config.schedule;
+  const hint = policy === 'static' ? (config.chunkSize === null ? 'staticDefault' : 'staticChunk') : policy + 'Hint';
+  $('scheduleHint').textContent = t(hint, config.chunkSize ?? 1);
+  $('scheduleCode').textContent = scheduleClause();
+  $('step').disabled = $('finish').disabled = started && elapsed === plan.end;
+  const completed = plan.tasks.filter(task => started && task.end <= elapsed);
+  const visibleChunks = plan.chunks.filter(isClaimed);
+  const claimed = new Set(visibleChunks.map(chunk => chunk.id));
+  const primeCount = completed.filter(task => task.prime).length;
+  $('completed').textContent = `${completed.length} / ${plan.tasks.length}`;
+  $('partial').textContent = primeCount;
+  $('claimedChunks').textContent = visibleChunks.length;
+  $('time').textContent = elapsed;
+  $('progress').max = plan.end;
+  $('progress').value = elapsed;
+  $('progressValue').textContent = `${elapsed} / ${plan.end}`;
+  $('numbers').innerHTML = plan.tasks.map(task => {
+    const status = statusOf(task), owner = claimed.has(task.chunk);
+    return `<div class="number ${status}" data-number="${task.number}" data-owner="${owner ? task.thread : ''}" style="--thread-color:${owner ? colors[task.thread] : '#d6dfeb'}" title="${t(status)} · ${owner ? 'Thread ' + task.thread : t('unassigned')}"><strong>${task.number}</strong><small>${owner ? 'T' + task.thread + ' · #' + task.chunk : '—'}</small></div>`;
+  }).join('');
+  $('threadRows').innerHTML = Array.from({length:config.threads}, (_, thread) => {
+    const all = plan.tasks.filter(task => task.thread === thread);
+    const assigned = all.filter(task => claimed.has(task.chunk));
+    const done = completed.filter(task => task.thread === thread);
+    const active = all.some(task => started && task.start <= elapsed && task.end > elapsed);
+    const status = active ? t('running') : started && all.length === done.length ? t(elapsed === plan.end ? 'done' : 'barrier') : t('waiting');
+    return `<tr data-thread="${thread}"><td><i class="thread-mark" style="background:${colors[thread]}"></i>Thread ${thread}</td><td><div class="chips">${assigned.map(task => `<span class="chip ${started && task.end <= elapsed ? 'done' : ''}" style="--thread-color:${colors[thread]}">${task.number}</span>`).join('') || '—'}</div></td><td>${done.length} / ${assigned.length}</td><td>${done.filter(task => task.prime).length}</td><td>${status}</td></tr>`;
+  }).join('');
+  $('timeline').innerHTML = Array.from({length:config.threads}, (_, thread) => {
+    const chunks = visibleChunks.filter(chunk => chunk.thread === thread);
+    const end = Math.max(0, ...chunks.map(chunk => chunk.end));
+    const segments = chunks.map(chunk => {
+      const status = started && chunk.end <= elapsed ? 'done' : started && chunk.start <= elapsed ? 'running' : '';
+      const title = t('chunkTitle', chunk.id, plan.numbers[chunk.first], plan.numbers[chunk.first+chunk.count-1], chunk.start, chunk.end);
+      return `<span class="segment ${status}" title="${title}" style="left:${100*chunk.start/plan.end}%;width:${100*(chunk.end-chunk.start)/plan.end}%;background:${colors[thread]}"></span>`;
+    }).join('');
+    return `<div class="timeline-row"><span>Thread ${thread}</span><div class="track">${segments}<span class="cursor" style="left:${Math.min(99.8,100*elapsed/plan.end)}%"></span></div><span>${end} ${t('unit')}</span></div>`;
+  }).join('');
+  $('chunkRows').innerHTML = visibleChunks.map(chunk => `<tr><td>${chunk.id}</td><td><i class="thread-mark" style="background:${colors[chunk.thread]}"></i>${chunk.thread}</td><td>${plan.numbers[chunk.first]} → ${plan.numbers[chunk.first+chunk.count-1]}</td><td>${chunk.count}</td><td>${chunk.dispatch}</td><td>${chunk.start} → ${chunk.end}</td></tr>`).join('') || `<tr><td colspan="6">${t('empty')}</td></tr>`;
+  $('result').hidden = !started || elapsed !== plan.end;
+  if (!$('result').hidden) {
+    const counts = Array.from({length:config.threads}, (_, thread) => completed.filter(task => task.thread === thread && task.prime).length);
+    $('result').innerHTML = `<strong>${t('total',config.maxN,primeCount+1)}</strong><p>${t('sum',counts.join(' + '),primeCount+1)}</p>`;
+  }
+  $('code').textContent = `#include <stdio.h>
+#include <omp.h>
+
+int is_prime(int n) {
+    if (n < 2) return 0;
+    if (n == 2) return 1;
+    if (n % 2 == 0) return 0;
+    for (int d = 3; d * d <= n; d += 2)
+        if (n % d == 0) return 0;
+    return 1;
+}
+
+int main(void) {
+    const int N = ${config.maxN};
+    int count = 1;
+    omp_set_dynamic(0);
+    #pragma omp parallel for num_threads(${config.threads}) ${scheduleClause()} reduction(+:count)
+    for (int n = 3; n <= N; n += 2) {
+        count += is_prime(n);
+    }
+    printf("%d\\n", count);
+    return 0;
+}`;
+}
+function nextEvent() {
+  if (!valid) return;
+  if (!started) { started = true; elapsed = 0; }
+  else elapsed = plan.events.find(time => time > elapsed) ?? plan.end;
+  if (elapsed === plan.end) stop();
+  render();
+}
+function applyLanguage() {
+  document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang;
+  document.title = t('title');
+  document.querySelectorAll('[data-text]').forEach(el => { el.textContent = t(el.dataset.text); });
+  document.querySelectorAll('[data-aria]').forEach(el => el.setAttribute('aria-label',t(el.dataset.aria)));
+  $('chunkSize').placeholder = t('default');
+  document.querySelectorAll('[data-lang]').forEach(button => {
+    const active = button.dataset.lang === lang;
+    button.classList.toggle('active',active);
+    button.setAttribute('aria-pressed',String(active));
+  });
+  if (plan || !valid) render();
+}
+$('settings').addEventListener('submit', event => event.preventDefault());
+$('settings').addEventListener('input', rebuild);
+$('play').addEventListener('click', () => {
+  if (!valid) return;
+  if (timer) { stop(); render(); return; }
+  if (elapsed === plan.end) { elapsed = 0; started = false; }
+  started = true;
+  timer = setInterval(nextEvent,250);
+  render();
+});
+$('step').addEventListener('click', () => { stop(); nextEvent(); });
+$('finish').addEventListener('click', () => { if (!valid) return; stop(); started = true; elapsed = plan.end; render(); });
+$('reset').addEventListener('click', () => { stop(); elapsed = 0; started = false; render(); });
+$('progress').addEventListener('input', event => { stop(); started = true; elapsed = Number(event.target.value); render(); });
+document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click', () => { lang = button.dataset.lang; applyLanguage(); }));
+applyLanguage();
+rebuild();
+</script>
+</body>
+</html>

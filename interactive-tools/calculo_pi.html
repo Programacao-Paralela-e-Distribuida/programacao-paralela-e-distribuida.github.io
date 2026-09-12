@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integração Paralela MPI - Visualização</title>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Dicionário de Traduções / Translations Dictionary
+        const translations = {
+          pt: {
+            title: "Integração Paralela com MPI",
+            subtitle: "Cálculo de π usando o método da integral: π = ∫₀¹ 4/(1+x²) dx",
+            labelProcesses: "Número de Processos MPI:",
+            labelSteps: "Número de Steps:",
+            labelLoadDist: "Distribuição de Carga",
+            btnCyclic: "Cíclica",
+            btnBlock: "Em Blocos",
+            btnPause: "⏸ Pausar",
+            btnReset: "🔄 Reiniciar",
+            btnStart: "▶ Iniciar",
+            steps: "steps",
+            chartTitle: "Aproximação da Integral (Método dos Retângulos)",
+            chartCyclic: "Intercalado (Cíclico)",
+            chartBlock: "Agrupado (Blocos)",
+            tableTitle: "Distribuição de Trabalho",
+            tableTitleCyclic: "i = rank; i < num_steps; i += size",
+            tableTitleBlock: "Blocos Contíguos por Processo",
+            thRank: "Rank",
+            thSteps: "Steps Processados",
+            thPartialSum: "Soma Parcial",
+            thStatus: "Status",
+            statusComplete: "✓ Completo",
+            statusProcessing: "⟳ Processando",
+            statusWaiting: "○ Aguardando",
+            globalSumTitle: "Soma Global (Rank 0)",
+            partialSumsLabel: "Somas parciais de cada processo:",
+            finalResultLabel: "Resultado final:",
+            realValueLabel: "Valor real:",
+            expTitle: "Explicação do Código MPI",
+            expCyclicTitle: "1. Distribuição Cíclica",
+            expCyclicDesc: "Cada processo começa a partir de seu ID (rank) e avança saltando pelo número total de processos (size). Os passos ficam intercalados.",
+            expBlockTitle: "2. Distribuição em Blocos",
+            expBlockDesc: "O espaço total de iterações é fatiado em pedaços contínuos de tamanho igual. Cada processo calcula uma região linear fixa da curva.",
+            expReduceDesc: "Independentemente de como a carga foi distribuída (cíclica ou blocos), todas as somas parciais locais são combinadas através de uma operação de redução de soma aritmética, consolidando o resultado final em uma única variável no processo raiz (Rank 0)."
+          },
+          es: {
+            title: "Integración Paralela con MPI",
+            subtitle: "Cálculo de π usando el método de la integral: π = ∫₀¹ 4/(1+x²) dx",
+            labelProcesses: "Número de Procesos MPI:",
+            labelSteps: "Número de Pasos (Steps):",
+            labelLoadDist: "Distribución de Carga",
+            btnCyclic: "Cíclica",
+            btnBlock: "En Bloques",
+            btnPause: "⏸ Pausar",
+            btnReset: "🔄 Reiniciar",
+            btnStart: "▶ Iniciar",
+            steps: "pasos",
+            chartTitle: "Aproximación de la Integral (Método de los Rectángulos)",
+            chartCyclic: "Intercalado (Cíclico)",
+            chartBlock: "Agrupado (Bloques)",
+            tableTitle: "Distribución de Trabajo",
+            tableTitleCyclic: "i = rank; i < num_steps; i += size",
+            tableTitleBlock: "Bloques Contiguos por Proceso",
+            thRank: "Rank",
+            thSteps: "Pasos Procesados",
+            thPartialSum: "Suma Parcial",
+            thStatus: "Estado",
+            statusComplete: "✓ Completo",
+            statusProcessing: "⟳ Procesando",
+            statusWaiting: "○ Esperando",
+            globalSumTitle: "Suma Global (Rank 0)",
+            partialSumsLabel: "Sumas parciales de cada proceso:",
+            finalResultLabel: "Resultado final:",
+            realValueLabel: "Valor real:",
+            expTitle: "Explicación del Código MPI",
+            expCyclicTitle: "1. Distribución Cíclica",
+            expCyclicDesc: "Cada proceso comienza a partir de su ID (rank) y avanza saltando por el número total de procesos (size). Los pasos quedan intercalados.",
+            expBlockTitle: "2. Distribución en Bloques",
+            expBlockDesc: "El espacio total de iteraciones se divide en partes continuas de igual tamaño. Cada proceso calcula una región lineal fija de la curva.",
+            expReduceDesc: "Independientemente de cómo se haya distribuido la carga (cíclica o por bloques), todas las sumas parciales locales se combinan mediante una operación de reducción de suma aritmética, consolidando el resultado final en una sola variable en el proceso raíz (Rank 0)."
+          },
+          en: {
+            title: "Parallel Integration with MPI",
+            subtitle: "Calculating π using the integral method: π = ∫₀¹ 4/(1+x²) dx",
+            labelProcesses: "Number of MPI Processes:",
+            labelSteps: "Number of Steps:",
+            labelLoadDist: "Load Distribution",
+            btnCyclic: "Cyclic",
+            btnBlock: "Block",
+            btnPause: "⏸ Pause",
+            btnReset: "🔄 Restart",
+            btnStart: "▶ Start",
+            steps: "steps",
+            chartTitle: "Integral Approximation (Rectangle Method)",
+            chartCyclic: "Interleaved (Cyclic)",
+            chartBlock: "Grouped (Block)",
+            tableTitle: "Work Distribution",
+            tableTitleCyclic: "i = rank; i < num_steps; i += size",
+            tableTitleBlock: "Contiguous Blocks per Process",
+            thRank: "Rank",
+            thSteps: "Processed Steps",
+            thPartialSum: "Partial Sum",
+            thStatus: "Status",
+            statusComplete: "✓ Complete",
+            statusProcessing: "⟳ Processing",
+            statusWaiting: "○ Waiting",
+            globalSumTitle: "Global Sum (Rank 0)",
+            partialSumsLabel: "Partial sums from each process:",
+            finalResultLabel: "Final result:",
+            realValueLabel: "Actual value:",
+            expTitle: "MPI Code Explanation",
+            expCyclicTitle: "1. Cyclic Distribution",
+            expCyclicDesc: "Each process starts from its ID (rank) and steps forward by the total number of processes (size). The steps are interleaved.",
+            expBlockTitle: "2. Block Distribution",
+            expBlockDesc: "The total iteration space is sliced into continuous chunks of equal size. Each process calculates a fixed linear region of the curve.",
+            expReduceDesc: "Regardless of how the workload was distributed (cyclic or block), all local partial sums are combined using an arithmetic sum reduction operation, consolidating the final result into a single variable on the root process (Rank 0)."
+          }
+        };
+
+        const MPIIntegrationVisualization = () => {
+          const [lang, setLang] = useState('pt'); // Idioma padrão: pt, es, en
+          const [numProcesses, setNumProcesses] = useState(1);
+          const [numSteps, setNumSteps] = useState(16);
+          const [distType, setDistType] = useState('cyclic'); // 'cyclic' ou 'block'
+          const [isAnimating, setIsAnimating] = useState(false);
+          const [currentStep, setCurrentStep] = useState(0);
+
+          const t = translations[lang]; // Atalho para os textos do idioma selecionado
+
+          const processColors = [
+            '#3b82f6', '#ef4444', '#10b981', '#f59e0b',
+            '#8b5cf6', '#ec4899', '#06b6d4', '#f97316',
+          ];
+
+          const getProcessSteps = (rank) => {
+            const steps = [];
+            if (distType === 'cyclic') {
+              for (let i = rank; i < numSteps; i += numProcesses) {
+                steps.push(i);
+              }
+            } else {
+              const baseBlockSize = Math.floor(numSteps / numProcesses);
+              const remainder = numSteps % numProcesses;
+              const start = rank * baseBlockSize + Math.min(rank, remainder);
+              const end = start + baseBlockSize + (rank < remainder ? 1 : 0);
+              for (let i = start; i < end; i++) {
+                steps.push(i);
+              }
+            }
+            return steps;
+          };
+
+          const getRankOfStep = (stepIdx) => {
+            if (distType === 'cyclic') {
+              return stepIdx % numProcesses;
+            } else {
+              const baseBlockSize = Math.floor(numSteps / numProcesses);
+              const remainder = numSteps % numProcesses;
+              let start = 0;
+              for (let r = 0; r < numProcesses; r++) {
+                const size = baseBlockSize + (r < remainder ? 1 : 0);
+                if (stepIdx >= start && stepIdx < start + size) {
+                  return r;
+                }
+                start += size;
+              }
+              return 0;
+            }
+          };
+
+          useEffect(() => {
+            let interval;
+            if (isAnimating) {
+              interval = setInterval(() => {
+                setCurrentStep(prev => {
+                  if (prev >= numSteps) {
+                    setIsAnimating(false);
+                    return numSteps;
+                  }
+                  return prev + 1;
+                });
+              }, 300);
+            }
+            return () => clearInterval(interval);
+          }, [isAnimating, numSteps]);
+
+          const handleReset = () => {
+            setCurrentStep(0);
+            setIsAnimating(false);
+          };
+
+          const handlePlayPause = () => {
+            if (currentStep >= numSteps) {
+              handleReset();
+            }
+            setIsAnimating(!isAnimating);
+          };
+
+          const calculateFunctionValue = (i) => {
+            const step = 1.0 / numSteps;
+            const x = (i + 0.5) * step;
+            return 4.0 / (1.0 + x * x);
+          };
+
+          return (
+            <div className="w-full max-w-6xl mx-auto p-6 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg my-8 relative">
+              
+              {/* Seletor de Idiomas no canto superior direito */}
+              <div className="absolute top-4 right-6 flex gap-2 bg-white px-2 py-1.5 rounded-lg shadow-sm border border-slate-200 z-10">
+                <button 
+                  onClick={() => setLang('pt')} 
+                  className={`text-xl p-1 rounded hover:bg-slate-100 transition ${lang === 'pt' ? 'bg-slate-200 ring-1 ring-blue-400' : ''}`}
+                  title="Português"
+                >
+                  🇧🇷
+                </button>
+                <button 
+                  onClick={() => setLang('es')} 
+                  className={`text-xl p-1 rounded hover:bg-slate-100 transition ${lang === 'es' ? 'bg-slate-200 ring-1 ring-blue-400' : ''}`}
+                  title="Español"
+                >
+                  🇪🇸
+                </button>
+                <button 
+                  onClick={() => setLang('en')} 
+                  className={`text-xl p-1 rounded hover:bg-slate-100 transition ${lang === 'en' ? 'bg-slate-200 ring-1 ring-blue-400' : ''}`}
+                  title="English"
+                >
+                  🇺🇸
+                </button>
+              </div>
+
+              <h1 className="text-3xl font-bold text-slate-800 mb-2 text-center pr-24">
+                {t.title}
+              </h1>
+              <p className="text-center text-slate-600 mb-6 pr-24 text-sm md:text-base">
+                {t.subtitle}
+              </p>
+
+              <div className="bg-white rounded-lg p-4 mb-6 shadow">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {t.labelProcesses} {numProcesses}
+                    </label>
+                    <input
+                      type="range"
+                      min="1"
+                      max="8"
+                      value={numProcesses}
+                      onChange={(e) => {
+                        setNumProcesses(parseInt(e.target.value));
+                        handleReset();
+                      }}
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {t.labelSteps} {numSteps}
+                    </label>
+                    <input
+                      type="range"
+                      min="8"
+                      max="32"
+                      step="4"
+                      value={numSteps}
+                      onChange={(e) => {
+                        setNumSteps(parseInt(e.target.value));
+                        handleReset();
+                      }}
+                      className="w-full"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      {t.labelLoadDist}
+                    </label>
+                    <div className="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+                      <button
+                        onClick={() => { setDistType('cyclic'); handleReset(); }}
+                        className={`flex-1 text-xs py-2 px-3 rounded-md font-medium transition ${distType === 'cyclic' ? 'bg-white shadow text-blue-600 font-semibold' : 'text-slate-600 hover:text-slate-900'}`}
+                      >
+                        {t.btnCyclic}
+                      </button>
+                      <button
+                        onClick={() => { setDistType('block'); handleReset(); }}
+                        className={`flex-1 text-xs py-2 px-3 rounded-md font-medium transition ${distType === 'block' ? 'bg-white shadow text-blue-600 font-semibold' : 'text-slate-600 hover:text-slate-900'}`}
+                      >
+                        {t.btnBlock}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex items-end gap-2">
+                    <button
+                      onClick={handlePlayPause}
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition font-medium"
+                    >
+                      {isAnimating ? t.btnPause : currentStep >= numSteps ? t.btnReset : t.btnStart}
+                    </button>
+                    <button
+                      onClick={handleReset}
+                      className="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg transition"
+                    >
+                      ↻
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-3 justify-center border-t border-slate-100 pt-3">
+                  {Array.from({ length: numProcesses }, (_, rank) => (
+                    <div key={rank} className="flex items-center gap-2 bg-slate-50 px-3 py-1 rounded-md border border-slate-200">
+                      <div
+                        className="w-4 h-4 rounded"
+                        style={{ backgroundColor: processColors[rank % processColors.length] }}
+                      />
+                      <span className="text-sm font-medium text-slate-700">
+                        Rank {rank} ({getProcessSteps(rank).length} {t.steps})
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg p-6 mb-6 shadow">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4 flex justify-between items-center">
+                  <span>{t.chartTitle}</span>
+                  <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-normal">
+                    Visualização: {distType === 'cyclic' ? t.chartCyclic : t.chartBlock}
+                  </span>
+                </h3>
+                <svg viewBox="0 0 800 400" className="w-full">
+                  <line x1="50" y1="350" x2="750" y2="350" stroke="#334155" strokeWidth="2" />
+                  <line x1="50" y1="350" x2="50" y2="50" stroke="#334155" strokeWidth="2" />
+                  
+                  <text x="400" y="385" textAnchor="middle" className="text-sm" fill="#475569">x</text>
+                  <text x="25" y="200" textAnchor="middle" className="text-sm" fill="#475569">f(x)</text>
+                  <text x="50" y="370" textAnchor="middle" className="text-xs" fill="#64748b">0</text>
+                  <text x="750" y="370" textAnchor="middle" className="text-xs" fill="#64748b">1</text>
+
+                  <path
+                    d={Array.from({ length: 200 }, (_, i) => {
+                      const x = i / 200;
+                      const y = 4.0 / (1.0 + x * x);
+                      const px = 50 + x * 700;
+                      const py = 350 - (y / 4) * 300;
+                      return i === 0 ? `M ${px} ${py}` : `L ${px} ${py}`;
+                    }).join(' ')}
+                    fill="none"
+                    stroke="#1e293b"
+                    strokeWidth="3"
+                  />
+
+                  {Array.from({ length: numSteps }, (_, i) => {
+                    const step = 1.0 / numSteps;
+                    const fx = calculateFunctionValue(i);
+                    const rank = getRankOfStep(i);
+                    const isProcessed = i < currentStep;
+                    
+                    const rectX = 50 + (i * step) * 700;
+                    const rectWidth = step * 700;
+                    const rectHeight = (fx / 4) * 300;
+                    const rectY = 350 - rectHeight;
+
+                    return (
+                      <g key={i}>
+                        <rect
+                          x={rectX}
+                          y={rectY}
+                          width={rectWidth}
+                          height={rectHeight}
+                          fill={isProcessed ? processColors[rank % processColors.length] : '#e2e8f0'}
+                          opacity={isProcessed ? 0.7 : 0.3}
+                          stroke={processColors[rank % processColors.length]}
+                          strokeWidth="1"
+                        />
+                        {i === currentStep - 1 && isAnimating && (
+                          <rect
+                            x={rectX}
+                            y={rectY}
+                            width={rectWidth}
+                            height={rectHeight}
+                            fill="none"
+                            stroke="#fbbf24"
+                            strokeWidth="3"
+                          />
+                        )}
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+
+              <div className="bg-white rounded-lg p-6 shadow">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">
+                  {t.tableTitle} ({distType === 'cyclic' ? t.tableTitleCyclic : t.tableTitleBlock})
+                </h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-slate-100">
+                        <th className="px-4 py-2 text-left font-semibold text-slate-700">{t.thRank}</th>
+                        <th className="px-4 py-2 text-left font-semibold text-slate-700">{t.thSteps}</th>
+                        <th className="px-4 py-2 text-left font-semibold text-slate-700">{t.thPartialSum}</th>
+                        <th className="px-4 py-2 text-left font-semibold text-slate-700">{t.thStatus}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Array.from({ length: numProcesses }, (_, rank) => {
+                        const steps = getProcessSteps(rank);
+                        const processedSteps = steps.filter(s => s < currentStep);
+                        const partialSum = processedSteps.reduce((sum, i) => sum + calculateFunctionValue(i), 0);
+                        const isComplete = processedSteps.length === steps.length && currentStep >= numSteps;
+                        
+                        return (
+                          <tr key={rank} className="border-b border-slate-200">
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-2">
+                                <div
+                                  className="w-4 h-4 rounded"
+                                  style={{ backgroundColor: processColors[rank % processColors.length] }}
+                                />
+                                <span className="font-medium">Rank {rank}</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 font-mono text-xs">
+                              {steps.map((s, idx) => (
+                                <span
+                                  key={s}
+                                  className={`inline-block px-2 py-1 m-0.5 rounded transition-colors duration-200 ${
+                                    s < currentStep ? 'bg-green-100 text-green-800' : 'bg-slate-100 text-slate-500'
+                                  }`}
+                                >
+                                  {s}
+                                </span>
+                              ))}
+                            </td>
+                            <td className="px-4 py-3 font-mono text-sm">
+                              {processedSteps.length > 0 ? partialSum.toFixed(6) : '0.000000'}
+                            </td>
+                            <td className="px-4 py-3">
+                              {isComplete ? (
+                                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                                  {t.statusComplete}
+                                </span>
+                              ) : currentStep > 0 && processedSteps.length > 0 ? (
+                                <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                  {t.statusProcessing}
+                                </span>
+                              ) : (
+                                <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-medium">
+                                  {t.statusWaiting}
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                {currentStep >= numSteps && (
+                  <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border-2 border-blue-200">
+                    <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+                      <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs">MPI_Reduce</span>
+                      {t.globalSumTitle}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-slate-600 mb-2">{t.partialSumsLabel}</p>
+                        {Array.from({ length: numProcesses }, (_, rank) => {
+                          const steps = getProcessSteps(rank);
+                          const sum = steps.reduce((s, i) => s + calculateFunctionValue(i), 0);
+                          return (
+                            <div key={rank} className="text-xs font-mono mb-1">
+                              Rank {rank}: {sum.toFixed(8)}
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div className="bg-white p-4 rounded-lg shadow-sm">
+                        <p className="text-sm text-slate-600 mb-2">{t.finalResultLabel}</p>
+                        <p className="text-2xl font-bold text-blue-600">
+                          π ≈ {(
+                            (1.0 / numSteps) *
+                            Array.from({ length: numSteps }, (_, i) => calculateFunctionValue(i)).reduce((a, b) => a + b, 0)
+                          ).toFixed(15)}
+                        </p>
+                        <p className="text-xs text-slate-500 mt-1">
+                          {t.realValueLabel} π = 3.141592653589793
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 bg-slate-800 text-slate-100 rounded-lg p-6 shadow-lg">
+                <h3 className="text-lg font-semibold mb-4">{t.expTitle}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm font-mono">
+                  <div className={`p-3 rounded transition-all ${distType === 'cyclic' ? 'bg-slate-700 ring-2 ring-blue-500' : 'bg-slate-900/50 opacity-50'}`}>
+                    <h4 className="font-sans font-bold text-xs text-blue-400 uppercase tracking-wider mb-2">{t.expCyclicTitle}</h4>
+                    <span className="text-blue-300">for</span> (i = rank; i &lt; num_steps; i += size)
+                    <p className="text-xs mt-2 text-slate-300 font-sans">
+                      {t.expCyclicDesc}
+                    </p>
+                  </div>
+                  
+                  <div className={`p-3 rounded transition-all ${distType === 'block' ? 'bg-slate-700 ring-2 ring-blue-500' : 'bg-slate-900/50 opacity-50'}`}>
+                    <h4 className="font-sans font-bold text-xs text-blue-400 uppercase tracking-wider mb-2">{t.expBlockTitle}</h4>
+                    <span className="text-blue-300">int</span> items = num_steps / size;<br />
+                    <span className="text-blue-300">int</span> start = rank * items;<br />
+                    <span className="text-blue-300">for</span> (i = start; i &lt; start + items; i++)
+                    <p className="text-xs mt-2 text-slate-300 font-sans">
+                      {t.expBlockDesc}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="bg-slate-700 p-3 rounded mt-4 text-sm font-mono">
+                  MPI_Reduce(&amp;sum, &amp;global_sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD)
+                  <p className="text-xs mt-1 text-slate-300 font-sans">
+                    {t.expReduceDesc}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        ReactDOM.render(<MPIIntegrationVisualization />, document.getElementById('root'));
+    </script>
+</body>
+</html>

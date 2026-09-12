@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPI Matrix-Vector Multiplication - Visualizer</title>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const translations = {
+          pt: {
+            title: "Multiplicação Matriz-Vetor com MPI",
+            subtitle: "Distribuição e particionamento de linhas usando MPI_Bcast, MPI_Scatter e MPI_Gather",
+            labelProcs: "Número de Processos (Linhas m):",
+            labelN: "Dimensão do Vetor (Colunas n):",
+            btnStart: "▶ Iniciar Fluxo",
+            btnPause: "⏸ Pausar",
+            btnReset: "🔄 Reiniciar",
+            step0: "Estado Inicial: Dados gerados no Processo Raiz (Rank 0)",
+            step1: "Etapa 1: MPI_Bcast — Vetor b é difundido para todos os processos",
+            step2: "Etapa 2: MPI_Scatter — Linhas de A são distribuídas ordenadamente",
+            step3: "Etapa 3: Cálculo Local — Cada processo computa o produto escalar",
+            step4: "Etapa 4: MPI_Gather — Resultados cloc são recolhidos no vetor c global",
+            matTitle: "Estrutura Global no Rank 0",
+            vecBTitle: "Vetor Global b",
+            vecCTitle: "Vetor de Saída c",
+            procPerspective: "Perspectiva Local de Memória por Processo",
+            thProc: "Processo",
+            thBcast: "Vetor b (Bcast)",
+            thScatter: "Linha Aloc (Scatter)",
+            thCalc: "Cálculo Local",
+            thGather: "Resultado cloc",
+            formulaLabel: "Fórmula de Computação por Processo:",
+            expTitle: "Explicação das Diretivas MPI (mpi_mxv.c)",
+            bcastDesc: "Envia uma cópia do vetor b completo localizado no Rank 0 para a memória local de todos os outros processos comunicadores.",
+            scatterDesc: "Fatia a matriz A dividindo suas linhas igualmente. Cada processo recebe uma única linha contígua diretamente em seu array local Aloc.",
+            gatherDesc: "O processo raiz recolhe os escalares cloc calculados de forma independente por cada processo e reconstrói o vetor c na ordem correta de Ranks."
+          },
+          es: {
+            title: "Multiplicación Matriz-Vector con MPI",
+            subtitle: "Distribución y particionamiento de filas usando MPI_Bcast, MPI_Scatter y MPI_Gather",
+            labelProcs: "Número de Procesos (Filas m):",
+            labelN: "Dimensión del Vector (Columnas n):",
+            btnStart: "▶ Iniciar Flujo",
+            btnPause: "⏸ Pausar",
+            btnReset: "🔄 Reiniciar",
+            step0: "Estado Inicial: Datos generados en el Proceso Raíz (Rank 0)",
+            step1: "Etapa 1: MPI_Bcast — El vector b se difunde a todos los procesos",
+            step2: "Etapa 2: MPI_Scatter — Las filas de A se distribuyen ordenadamente",
+            step3: "Etapa 3: Cálculo Local — Cada proceso computa el producto escalar",
+            step4: "Etapa 4: MPI_Gather — Resultados cloc se recolectan en el vector c global",
+            matTitle: "Estructura Global en el Rank 0",
+            vecBTitle: "Vector Global b",
+            vecCTitle: "Vector de Salida c",
+            procPerspective: "Perspectiva Local de Memoria por Proceso",
+            thProc: "Proceso",
+            thBcast: "Vector b (Bcast)",
+            thScatter: "Fila Aloc (Scatter)",
+            thCalc: "Cálculo Local",
+            thGather: "Resultado cloc",
+            formulaLabel: "Fórmula de Computación por Proceso:",
+            expTitle: "Explicación de las Directivas MPI (mpi_mxv.c)",
+            bcastDesc: "Envía una copia del vector b completo localizado en el Rank 0 a la memoria local de todos los demás procesos comunicadores.",
+            scatterDesc: "Divide la matriz A separando sus filas equitativamente. Cada proceso recibe una única fila contigua directamente en su arreglo local Aloc.",
+            gatherDesc: "El proceso raíz recolecta los escalares cloc calculados de forma independiente por cada proceso y reconstruye el vector c en el orden correcto de Ranks."
+          },
+          en: {
+            title: "Matrix-Vector Multiplication with MPI",
+            subtitle: "Row distribution and partitioning using MPI_Bcast, MPI_Scatter, and MPI_Gather",
+            labelProcs: "Number of Processes (Rows m):",
+            labelN: "Vector Dimension (Columns n):",
+            btnStart: "▶ Start Flow",
+            btnPause: "⏸ Pause",
+            btnReset: "🔄 Restart",
+            step0: "Initial State: Data allocated on the Root Process (Rank 0)",
+            step1: "Step 1: MPI_Bcast — Vector b is broadcast to all processes",
+            step2: "Step 2: MPI_Scatter — Rows of A are distributed sequentially",
+            step3: "Step 3: Local Calculation — Each process computes the dot product",
+            step4: "Step 4: MPI_Gather — Results cloc are gathered back into global vector c",
+            matTitle: "Global Structure on Rank 0",
+            vecBTitle: "Global Vector b",
+            vecCTitle: "Output Vector c",
+            procPerspective: "Local Memory Perspective per Process",
+            thProc: "Process",
+            thBcast: "Vector b (Bcast)",
+            thScatter: "Row Aloc (Scatter)",
+            thCalc: "Local Calc",
+            thGather: "Result cloc",
+            formulaLabel: "Computation Formula per Process:",
+            expTitle: "MPI Directives Explanation (mpi_mxv.c)",
+            bcastDesc: "Broadcasts a copy of the complete vector b located on Rank 0 into the local memory of all other processes in the communicator.",
+            scatterDesc: "Slices matrix A by dividing its rows equally. Each process receives a single contiguous row directly into its local Aloc array.",
+            gatherDesc: "The root process collects the single cloc scalars calculated independently by each process and reconstructs vector c in the correct Rank order."
+          }
+        };
+
+        const MPIMatrixVectorVisualizer = () => {
+          const [lang, setLang] = useState('pt');
+          const [numProcs, setNumProcs] = useState(4); // m = num_procs
+          const [dimN, setDimN] = useState(4); // n
+          const [currentStage, setCurrentStage] = useState(0); // 0: init, 1: bcast, 2: scatter, 3: mxv, 4: gather
+          const [isAnimating, setIsAnimating] = useState(false);
+
+          const t = translations[lang];
+
+          const processColors = [
+            '#3b82f6', '#ef4444', '#10b981', '#f59e0b',
+            '#8b5cf6', '#ec4899', '#06b6d4', '#f97316',
+          ];
+
+          // Lógica de dados igual à descrita no código mpi_mxv.c
+          // b[j] = 2.0; A[i*n + j] = (double) i;
+          const vectorB = Array(dimN).fill(2.0);
+          
+          const matrixA = Array.from({ length: numProcs }, (_, i) => 
+            Array(dimN).fill(0).map(() => parseFloat(i))
+          );
+
+          // Resultado local cloc[0] += Aloc[j] * b[j]
+          const getLocalCalcValue = (rank) => {
+            let sum = 0;
+            for(let j = 0; j < dimN; j++) {
+              sum += matrixA[rank][j] * vectorB[j];
+            }
+            return sum;
+          };
+
+          useEffect(() => {
+            let interval;
+            if (isAnimating) {
+              interval = setInterval(() => {
+                setCurrentStage(prev => {
+                  if (prev >= 4) {
+                    setIsAnimating(false);
+                    return 4;
+                  }
+                  return prev + 1;
+                });
+              }, 2500);
+            }
+            return () => clearInterval(interval);
+          }, [isAnimating]);
+
+          const getStageMessage = () => {
+            if (currentStage === 0) return t.step0;
+            if (currentStage === 1) return t.step1;
+            if (currentStage === 2) return t.step2;
+            if (currentStage === 3) return t.step3;
+            return t.step4;
+          };
+
+          return (
+            <div className="w-full max-w-6xl mx-auto p-6 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-lg my-8 relative">
+              
+              {/* Seletor de Idiomas */}
+              <div className="absolute top-4 right-6 flex gap-2 bg-white px-2 py-1.5 rounded-lg shadow-sm border border-slate-200 z-10">
+                <button onClick={() => setLang('pt')} className={`text-xl p-1 rounded hover:bg-slate-100 transition ${lang === 'pt' ? 'bg-slate-200 ring-1 ring-blue-400' : ''}`} title="Português">🇧🇷</button>
+                <button onClick={() => setLang('es')} className={`text-xl p-1 rounded hover:bg-slate-100 transition ${lang === 'es' ? 'bg-slate-200 ring-1 ring-blue-400' : ''}`} title="Español">🇪🇸</button>
+                <button onClick={() => setLang('en')} className={`text-xl p-1 rounded hover:bg-slate-100 transition ${lang === 'en' ? 'bg-slate-200 ring-1 ring-blue-400' : ''}`} title="English">🇺🇸</button>
+              </div>
+
+              <h1 className="text-3xl font-bold text-slate-800 mb-2 text-center pr-24">{t.title}</h1>
+              <p className="text-center text-slate-600 mb-6 pr-24 text-sm">{t.subtitle}</p>
+
+              {/* Controles do Simulador */}
+              <div className="bg-white rounded-lg p-4 mb-6 shadow grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">{t.labelProcs} {numProcs}</label>
+                  <input 
+                    type="range" min="2" max="6" value={numProcs} 
+                    onChange={(e) => { setNumProcs(parseInt(e.target.value)); setCurrentStage(0); setIsAnimating(false); }}
+                    className="w-full" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">{t.labelN} {dimN}</label>
+                  <input 
+                    type="range" min="2" max="6" value={dimN} 
+                    onChange={(e) => { setDimN(parseInt(e.target.value)); setCurrentStage(0); setIsAnimating(false); }}
+                    className="w-full" 
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => { if(currentStage === 4) setCurrentStage(0); setIsAnimating(!isAnimating); }}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition text-sm"
+                  >
+                    {isAnimating ? t.btnPause : currentStage === 4 ? t.btnReset : t.btnStart}
+                  </button>
+                  <button 
+                    onClick={() => { setCurrentStage(0); setIsAnimating(false); }}
+                    className="bg-slate-600 hover:bg-slate-700 text-white py-2 px-3 rounded-lg transition"
+                  >
+                    ↻
+                  </button>
+                </div>
+              </div>
+
+              {/* Banner do Estado Atual do Fluxo */}
+              <div className="mb-6 p-3 bg-blue-50 border border-blue-200 text-blue-800 font-medium rounded-lg text-center transition-all duration-300 shadow-sm">
+                <span className="inline-block px-2 py-0.5 mr-2 bg-blue-600 text-white rounded text-xs">Stage {currentStage}/4</span>
+                {getStageMessage()}
+              </div>
+
+              {/* Visualização de Dados: Memória Global (Rank 0) */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                
+                {/* Matriz A */}
+                <div className="bg-white p-4 rounded-lg shadow border border-slate-100 flex flex-col justify-between">
+                  <h3 className="text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">{t.matTitle} (A: {numProcs}×{dimN})</h3>
+                  <div className="border border-slate-200 p-2 rounded bg-slate-50 flex flex-col gap-1 font-mono">
+                    {matrixA.map((row, i) => (
+                      <div 
+                        key={i} className="flex gap-1 items-center p-1 rounded transition-all duration-500"
+                        style={{ backgroundColor: currentStage >= 2 ? `${processColors[i % processColors.length]}15` : 'transparent', border: currentStage === 2 ? `1px solid ${processColors[i % processColors.length]}` : '1px solid transparent' }}
+                      >
+                        <span className="text-[10px] w-12 text-slate-400 font-sans">Row {i}:</span>
+                        {row.map((val, j) => (
+                          <div key={j} className="flex-1 text-center bg-white border border-slate-200 py-1 rounded text-sm text-slate-800 font-bold">
+                            {val.toFixed(1)}
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-2 text-[11px] text-slate-400 italic">A[i*n + j] = (double) i</div>
+                </div>
+
+                {/* Vetor b */}
+                <div className="bg-white p-4 rounded-lg shadow border border-slate-100 flex flex-col justify-between">
+                  <h3 className="text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">{t.vecBTitle} (b: {dimN})</h3>
+                  <div 
+                    className="border p-4 rounded bg-slate-50 flex gap-2 font-mono transition-all duration-500"
+                    style={{ borderColor: currentStage === 1 ? '#3b82f6' : '#e2e8f0', backgroundColor: currentStage === 1 ? '#eff6ff' : '#f8fafc' }}
+                  >
+                    {vectorB.map((val, j) => (
+                      <div key={j} className="flex-1 text-center bg-white border border-blue-200 p-2 rounded text-base font-bold text-blue-600 shadow-sm">
+                        {val.toFixed(1)}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-2 text-[11px] text-slate-400 i">b[j] = 2.0</div>
+                </div>
+
+                {/* Vetor Resultante c */}
+                <div className="bg-white p-4 rounded-lg shadow border border-slate-100 flex flex-col justify-between">
+                  <h3 className="text-sm font-bold text-slate-700 mb-3 uppercase tracking-wider">{t.vecCTitle} (c: {numProcs})</h3>
+                  <div className="border border-slate-200 p-4 rounded bg-slate-50 flex flex-col gap-2 font-mono">
+                    {Array.from({ length: numProcs }).map((_, i) => {
+                      const showGather = currentStage === 4;
+                      return (
+                        <div key={i} className="flex items-center gap-2">
+                          <span className="text-[10px] text-slate-400 font-sans w-8">c[{i}]</span>
+                          <div 
+                            className="flex-1 text-center border p-1 rounded font-bold text-base transition-all duration-500"
+                            style={{ 
+                              backgroundColor: showGather ? 'white' : '#f1f5f9', 
+                              color: showGather ? processColors[i % processColors.length] : '#94a3b8',
+                              borderColor: showGather ? processColors[i % processColors.length] : '#cbd5e1'
+                            }}
+                          >
+                            {showGather ? getLocalCalcValue(i).toFixed(1) : "?"}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-2 text-[11px] text-slate-400 italic">MPI_Gather target storage</div>
+                </div>
+              </div>
+
+              {/* Tabela de Perspectiva Interna dos Ranks */}
+              <div className="bg-white rounded-lg p-6 shadow border border-slate-100">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">{t.procPerspective}</h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-slate-100 border-b border-slate-200 text-slate-700">
+                        <th className="px-4 py-2 text-left font-semibold">{t.thProc}</th>
+                        <th className="px-4 py-2 text-left font-semibold">{t.thBcast}</th>
+                        <th className="px-4 py-2 text-left font-semibold">{t.thScatter}</th>
+                        <th className="px-4 py-2 text-left font-semibold">{t.thCalc}</th>
+                        <th className="px-4 py-2 text-left font-semibold">{t.thGather}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Array.from({ length: numProcs }, (_, rank) => {
+                        const hasBcast = currentStage >= 1;
+                        const hasScatter = currentStage >= 2;
+                        const hasCalc = currentStage >= 3;
+                        const hasGather = currentStage >= 4;
+
+                        return (
+                          <tr key={rank} className="border-b border-slate-200 hover:bg-slate-50/50">
+                            {/* Identificação do Rank */}
+                            <td className="px-4 py-4 font-medium whitespace-nowrap">
+                              <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: processColors[rank % processColors.length] }} />
+                                <span className="font-semibold text-slate-700">Rank {rank} {rank === 0 ? '(Root)' : ''}</span>
+                              </div>
+                            </td>
+
+                            {/* Célula do MPI_Bcast */}
+                            <td className="px-4 py-4 transition-all duration-500">
+                              <div className={`flex gap-1 p-1 rounded border font-mono text-xs transition-all duration-500 ${hasBcast ? 'bg-blue-50/50 border-blue-300' : 'bg-slate-50 border-transparent opacity-30'}`}>
+                                {vectorB.map((val, idx) => (
+                                  <span key={idx} className="bg-white border px-1 rounded text-blue-600 font-bold">{val.toFixed(0)}</span>
+                                ))}
+                              </div>
+                            </td>
+
+                            {/* Célula do MPI_Scatter */}
+                            <td className="px-4 py-4 transition-all duration-500">
+                              <div className={`flex gap-1 p-1 rounded border font-mono text-xs transition-all duration-500`}
+                                   style={{ 
+                                     backgroundColor: hasScatter ? `${processColors[rank % processColors.length]}10` : '#f8fafc',
+                                     borderColor: hasScatter ? processColors[rank % processColors.length] : 'transparent',
+                                     opacity: hasScatter ? 1 : 0.3
+                                   }}
+                              >
+                                {matrixA[rank].map((val, idx) => (
+                                  <span key={idx} className="bg-white border px-1 rounded font-bold text-slate-700">{val.toFixed(0)}</span>
+                                ))}
+                              </div>
+                            </td>
+
+                            {/* Célula de Execução Local */}
+                            <td className="px-4 py-4 font-mono text-xs">
+                              {hasCalc ? (
+                                <div className="text-slate-600 bg-emerald-50 border border-emerald-300 p-1.5 rounded text-[11px] leading-tight">
+                                  <span className="block font-bold text-emerald-800">{t.formulaLabel}</span>
+                                  {matrixA[rank].map((val, idx) => `(${val}×${vectorB[idx]})`).join(' + ')}
+                                </div>
+                              ) : (
+                                <span className="text-slate-400 italic text-xs">...</span>
+                              )}
+                            </td>
+
+                            {/* Célula do MPI_Gather */}
+                            <td className="px-4 py-4 font-mono text-sm font-bold transition-all duration-500">
+                              <div 
+                                className="text-center p-1.5 rounded border shadow-sm transition-all duration-500"
+                                style={{ 
+                                  backgroundColor: hasCalc ? 'white' : '#f8fafc',
+                                  borderColor: hasGather ? '#10b981' : hasCalc ? '#cbd5e1' : 'transparent',
+                                  color: hasCalc ? processColors[rank % processColors.length] : '#94a3b8',
+                                  opacity: hasCalc ? 1 : 0.3
+                                }}
+                              >
+                                cloc: {getLocalCalcValue(rank).toFixed(1)}
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Bloco de Explicação de Código */}
+              <div className="mt-6 bg-slate-800 text-slate-100 rounded-lg p-6 shadow-lg">
+                <h3 className="text-lg font-semibold mb-4 text-slate-200">{t.expTitle}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-mono">
+                  
+                  <div className={`p-3 rounded transition-all border ${currentStage === 1 ? 'bg-slate-700 border-blue-400' : 'bg-slate-900/50 border-transparent opacity-60'}`}>
+                    <h4 className="font-sans font-bold text-blue-400 uppercase tracking-wider mb-2">1. MPI_Bcast</h4>
+                    <span className="text-slate-300">MPI_Bcast(&amp;b[0], n, MPI_DOUBLE, 0, MPI_COMM_WORLD);</span>
+                    <p className="text-[11px] mt-2 text-slate-300 font-sans">{t.bcastDesc}</p>
+                  </div>
+
+                  <div className={`p-3 rounded transition-all border ${currentStage === 2 ? 'bg-slate-700 border-amber-400' : 'bg-slate-900/50 border-transparent opacity-60'}`}>
+                    <h4 className="font-sans font-bold text-amber-400 uppercase tracking-wider mb-2">2. MPI_Scatter</h4>
+                    <span className="text-slate-300">MPI_Scatter(A, n, MPI_DOUBLE, Aloc, n, MPI_DOUBLE, 0, WORLD);</span>
+                    <p className="text-[11px] mt-2 text-slate-300 font-sans">{t.scatterDesc}</p>
+                  </div>
+
+                  <div className={`p-3 rounded transition-all border ${currentStage === 4 ? 'bg-slate-700 border-emerald-400' : 'bg-slate-900/50 border-transparent opacity-60'}`}>
+                    <h4 className="font-sans font-bold text-emerald-400 uppercase tracking-wider mb-2">3. MPI_Gather</h4>
+                    <span className="text-slate-300">MPI_Gather(cloc, 1, MPI_DOUBLE, c, 1, MPI_DOUBLE, 0, WORLD);</span>
+                    <p className="text-[11px] mt-2 text-slate-300 font-sans">{t.gatherDesc}</p>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          );
+        };
+
+        ReactDOM.render(<MPIMatrixVectorVisualizer />, document.getElementById('root'));
+    </script>
+</body>
+</html>
