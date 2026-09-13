@@ -61,7 +61,7 @@ São abordados o modelo de tarefas do OpenMP, a transferência de processamento 
 
 ## Aquisição 
 
-   Os livros acima podem ser adquiridos no formato impresso ou e-book no site da editora [Casa do Código](https://www.casadocodigo.com.br/pages/sumario-programacao-paralela).
+Para conhecer mais detalhes sobre os livros acima e adquiri-los no formato impresso ou e-book, acesse o site da editora [Casa do Código](https://www.casadocodigo.com.br/pages/sumario-programacao-paralela).
 
 <!--
 ## Apresentação
