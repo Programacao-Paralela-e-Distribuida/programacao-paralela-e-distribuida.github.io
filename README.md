@@ -182,13 +182,13 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <p>Alguns slides de apoio para os professores estão disponíveis a seguir. </p>
 
 <ul>
-<li> <b> Livro 1 - MPI, OpenMP e OpenACC</b></li>
+<li> <b> Livro 1</b></li>
 <ul>
 <li><a href="slides/MPI.pdf">MPI</a></li>
 <li><a href="slides/OpenMP.pdf">OpenMP</a></li>
 <li><a href="slides/OpenACC.pdf">OpenACC</a></li>
 </ul>
-<li>  <b>Livro 2 - OpenMP Tasks, OpenMP offloading e Programação Híbrida</b></li>
+<li>  <b>Livro 2</b></li>
 <ul>
 <li><a href="slides/OpenMPTasks.pdf">OpenMP Tasks</a></li>
 <li><a href="slides/Hibrida.pdf">Programação Hibrida</a></li>
@@ -209,7 +209,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <p> Colocamos disponíveis algumas ferramentas de visualização, disponíveis em português, espanhol e inglês, para auxiliar no entendimento do funcionamento da distribuição de dados e carga de trabalho entre processos/<em>threads</em> de uma aplicação MPI ou OpenMP.</p>
 
 <ul>
-<li><b>Livro 1 </li>
+<li><b>Livro 1</b></li>
 <ul>  
 <li><b>MPI</b></li>
 <ul>  
@@ -221,8 +221,9 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <ul>
 <li><a href="./interactive-tools/simulador-openmp.html">Escalonamento das iterações de um laço em OpenMP</a></li>
 <li><a href="./interactive-tools/simulador-openmp-collapse-tile.html">Funcionamento da cláusula <b>collapse</b> no OpenMP</a></li>
-</ul>ul>
+</ul>
 <li><b>OpenACC</b></li> 
+<ul>
 <li><a href="./interactive-tools/simulador-openacc-collapse-tile.html">Funcionamento da cláusula <b>collapse</b> no OpenACC</a></li>
 </ul>
 </ul>
