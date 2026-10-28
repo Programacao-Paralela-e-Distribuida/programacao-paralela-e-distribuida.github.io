@@ -209,20 +209,20 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <p> Colocamos disponíveis algumas ferramentas de visualização, disponíveis em português, espanhol e inglês, para auxiliar no entendimento do funcionamento da distribuição de dados e carga de trabalho entre processos/<em>threads</em> de uma aplicação MPI ou OpenMP.</p>
 
 <ul>
-<li><b> Livro 1 </li>
+<li><b>Livro 1 </li>
 <ul>  
 <li><b>MPI</b></li>
 <ul>  
 <li><a href="./interactive-tools/calcpi2.html">Cálculo de Pi com MPI</a></li>
 <li><a href="./interactive-tools/primos2.html">Cálculo de primos com MPI</a></li>
 <li><a href="./interactive-tools/mxv2.html">Multiplicação de Matriz por Vetor com MPI</a></li>
-</ul?
+</ul>
 <li><b>OpenMP</b></li>
 <ul>
 <li><a href="./interactive-tools/simulador-openmp.html">Escalonamento das iterações de um laço em OpenMP</a></li>
 <li><a href="./interactive-tools/simulador-openmp-collapse-tile.html">Funcionamento da cláusula <b>collapse</b> no OpenMP</a></li>
 </ul>ul>
-<li><b>OpenACC</b>b></li> 
+<li><b>OpenACC</b></li> 
 <li><a href="./interactive-tools/simulador-openacc-collapse-tile.html">Funcionamento da cláusula <b>collapse</b> no OpenACC</a></li>
 </ul>
 </ul>
