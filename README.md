@@ -214,7 +214,7 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 <li><b>MPI</b></li>
 <ul>  
 <li><a href="./interactive-tools/calcpi2.html">Cálculo de Pi com MPI</a></li>
-<li><a href="./interactive-tools/primos2.html">Cálculo de primos com MPI</a></li>
+<li><a href="./interactive-tools/calculo_primos.html">Cálculo de primos com MPI</a></li>
 <li><a href="./interactive-tools/mxv2.html">Multiplicação de Matriz por Vetor com MPI</a></li>
 </ul>
 <li><b>OpenMP</b></li>
