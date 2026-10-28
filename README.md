@@ -219,12 +219,12 @@ Esperamos que este livro possa ser um guia seguro para os passos iniciais das pe
 </ul>
 <li><b>OpenMP</b></li>
 <ul>
-<li><a href="./interactive-tools/simulador-openmp.html">Escalonamento das iterações de um laço em OpenMP</a></li>
-<li><a href="./interactive-tools/simulador-openmp-collapse-tile.html">Funcionamento da cláusula <b>collapse</b> no OpenMP</a></li>
+<li><a href="./interactive-tools/simulador_openmp.html">Escalonamento das iterações de um laço em OpenMP</a></li>
+<li><a href="./interactive-tools/simulador_openmp_collapse_tile.html">Funcionamento da cláusula <b>collapse</b> no OpenMP</a></li>
 </ul>
 <li><b>OpenACC</b></li> 
 <ul>
-<li><a href="./interactive-tools/simulador-openacc-collapse-tile.html">Funcionamento da cláusula <b>collapse</b> no OpenACC</a></li>
+<li><a href="./interactive-tools/simulador_openacc_collapse_tile.html">Funcionamento da cláusula <b>collapse</b> no OpenACC</a></li>
 </ul>
 </ul>
 </ul>
